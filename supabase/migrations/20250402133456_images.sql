@@ -1,7 +1,7 @@
 create schema private;
 
 insert into storage.buckets (id, name)
-values ('files', 'files')
+values ('images', 'images')
 on conflict do nothing;
 
 create or replace function private.uuid_or_null(str text)
@@ -15,22 +15,24 @@ begin
   end;
 $$;
 
-create policy "Authenticated users can upload files"
+create policy "Authenticated users can upload images"
 on storage.objects for insert to authenticated with check (
-  bucket_id = 'files' and owner = auth.uid() and private.uuid_or_null(path_tokens[1]) is not null
+  bucket_id = 'images' and
+    owner = auth.uid() and
+    private.uuid_or_null(path_tokens[1]) is not null
 );
 
-create policy "Users can view their own files"
+create policy "Users can view their own images"
 on storage.objects for select to authenticated using (
-  bucket_id = 'files' and owner = auth.uid()
+  bucket_id = 'images' and owner = auth.uid()
 );
 
-create policy "Users can update their own files"
+create policy "Users can update their own images"
 on storage.objects for update to authenticated with check (
-  bucket_id = 'files' and owner = auth.uid()
+  bucket_id = 'images' and owner = auth.uid()
 );
 
-create policy "Users can delete their own files"
+create policy "Users can delete their own images"
 on storage.objects for delete to authenticated using (
-  bucket_id = 'files' and owner = auth.uid()
+  bucket_id = 'images' and owner = auth.uid()
 );
