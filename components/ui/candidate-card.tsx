@@ -8,12 +8,13 @@ import { BsThreeDots } from "react-icons/bs";
 
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { Ellipsis } from 'lucide-react';
+import { Ellipsis, Icon } from 'lucide-react';
+import { IoMale, IoFemale } from "react-icons/io5";
 
 
 interface CandidateCardProps {
     imgUrl?: string;
-    fullName: string,
+    displayName: string,
     politicalParty?: string;
 
     birthdate?: string,
@@ -33,7 +34,7 @@ interface CandidateCardProps {
 export const CandidateCard = ({
     //candidate info
     imgUrl,
-    fullName,
+    displayName,
     politicalParty,
     //personal info
     birthdate,
@@ -49,7 +50,10 @@ export const CandidateCard = ({
     periodOfResidence,
     registeredVoterOf
 }: CandidateCardProps) => {
+    const isMale = sex?.toLowerCase() === "m";
+
     const [isTap, setIsTap] = useState(false)
+
     useEffect(() => {
         console.log("Image URL:", imgUrl);
     }, [imgUrl]);
@@ -60,7 +64,7 @@ export const CandidateCard = ({
         "Age on Election": ageOnElection,
         Birthplace: birthplace,
         Residence: residence,
-        Sex: sex,
+        // Sex: sex,
         "Civil Status": civilStatus,
         Spouse: Spouse,
         Profession: profession,
@@ -90,8 +94,15 @@ export const CandidateCard = ({
                 </div>
                 <div className='flex flex-col ml-2 w-[calc(100%-7rem)]'>
                     {/* candidate name */}
-                    <div className="text-black font-bold text-xl">
-                        {fullName}
+                    <div className='flex flex-row items-center gap-2'>
+                        <div className="text-black font-bold text-xl">
+                            {displayName}
+                        </div>
+                        {isMale ? (
+                            <IoMale className="text-blue-600 text-lg" />
+                        ) : (
+                            <IoFemale className="text-pink-600 text-lg" />)
+                        }
                     </div>
                     {/* You might want to display the other properties too */}
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap text-gray-600 text-sm">
@@ -104,15 +115,23 @@ export const CandidateCard = ({
                     </div>
                 </div>
             </div>
-            <div className='flex flex-row justify-between'>
-                <div className='flex flex-row gap-1'>
+
+            <div className='flex flex-row justify-end items-center space-x-4'>
+                {/* <div className='flex flex-row gap-1'>
                     <IoIosInformationCircleOutline className='text-gray-500' />
-                    <p className='text-xs text-gray-500 '>
-                        See more
+                        <p className='text-xs text-gray-500 '>
+                            See more
+                        </p>
+                </div> */}
+                <Button className='rounded-full' variant="outline" size="sm">
+                    <p className='font-bold text-sm'>
+                        Ask Yano
                     </p>
-                </div>
+                </Button>
                 <Ellipsis className="text-black" size={18} />
             </div>
+
+
             {/* <Separator orientation="vertical" className='w-full bg-gray-200 h-px' />
             <div className='flex items-end justify-end'>
                 <Button className='bg-gray-100 rounded-3xl font-bold' variant="outline" size="sm">Ask Yano</Button>
@@ -151,11 +170,26 @@ export const CandidateCard = ({
 };
 
 const FilterContainer = ({ filter }: { filter: string }) => {
+    // const isMale = filter.toLowerCase() === "m";
+    // const isFemale = filter.toLowerCase() === "f";
+
+    // const bgColor = isMale
+    //     ? "bg-blue-100 text-blue-700"
+    //     : isFemale
+    //         ? "bg-pink-100 text-pink-700"
+    //         : "bg-gray-100 text-gray-800";
+
     return (
+        // <div className={`flex items-center gap-1 rounded-sm p-1 ${bgColor}`}>
+        //     {isMale && <IoMale className="text-lg" />}
+        //     {isFemale && <IoFemale className="text-lg" />}
+        //     {!isMale && !isFemale && <p className="text-xs">{filter}</p>}
+
+        // </div>
         <div className='bg-[#f8f8fa] rounded-sm p-1'>
             <p className='text-black text-xs'>
                 {filter}
             </p>
         </div>
-    )
-}
+    );
+};
