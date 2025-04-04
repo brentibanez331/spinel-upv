@@ -40,12 +40,12 @@ export default function UserDashboard() {
                     <CandidateCard
                         key={candidate.id}
                         imgUrl={candidate.image_url}
-                        fullName={candidate.full_name}
+                        displayName={candidate.display_name}
                         politicalParty={candidate.political_party || "N/A"}
                         positionSought={candidate.candidacies?.[0]?.position_sought || "Unknown"}
                         sex={candidate.personal_info?.sex || "Not Specified"}
                         profession={candidate.personal_info?.profession || "Not Specified"}
-                        birthplace={candidate.personal_info?.birthplace || "Not Specified"}
+                        // birthplace={candidate.personal_info?.birthplace || "Not Specified"}
                         periodOfResidence={candidate.candidacies?.[0]?.period_of_residence || "Not Specified"}
                     />
                 ))
