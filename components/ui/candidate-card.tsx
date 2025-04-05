@@ -25,7 +25,7 @@ export const CandidateCard = ({
     selectedCandidate,
     setSelectedCandidate
 }: CandidateCardProps) => {
-    const isMale = candidate.personal_info!.sex!.toLowerCase() === "m";
+    const isMale = candidate.personal_info[0].sex!.toLowerCase() === "m";
 
     const [isTap, setIsTap] = useState(false)
 
@@ -64,7 +64,7 @@ export const CandidateCard = ({
                     </div>
                     {/* You might want to display the other properties too */}
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap text-gray-600 text-sm">
-                        {candidate.political_party} | {candidate.candidacy.position_sought}
+                        {candidate.political_party} | {candidate.candidacy[0].position_sought}
                     </div>
                 </div>
             </div>

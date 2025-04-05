@@ -6,8 +6,8 @@ export interface Candidate {
   display_name: string;
   political_party: string;
   image_url: string;
-  personal_info: PersonalInfo;
-  candidacy: Candidacy;
+  personal_info: PersonalInfo[];
+  candidacy: Candidacy[];
 }
 
 export interface PersonalInfo {
