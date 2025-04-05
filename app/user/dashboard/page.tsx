@@ -10,6 +10,7 @@ export default function UserDashboard() {
     const [candidates, setCandidates] = useState<Candidate[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null)
 
     useEffect(() => {
         const loadCandidates = async () => {
@@ -34,24 +35,21 @@ export default function UserDashboard() {
     }
 
     return (
-        <div className="flex gap-4 flex-col">
-            {candidates && candidates.length > 0 ? (
-                candidates.map((candidate) => (
-                    <CandidateCard
-                        key={candidate.id}
-                        imgUrl={candidate.image_url}
-                        displayName={candidate.display_name}
-                        politicalParty={candidate.political_party || "N/A"}
-                        positionSought={candidate.candidacies?.[0]?.position_sought || "Unknown"}
-                        sex={candidate.personal_info?.sex || "Not Specified"}
-                        profession={candidate.personal_info?.profession || "Not Specified"}
-                        // birthplace={candidate.personal_info?.birthplace || "Not Specified"}
-                        periodOfResidence={candidate.candidacies?.[0]?.period_of_residence || "Not Specified"}
-                    />
-                ))
-            ) : (
-                <div>No candidates available.</div>
-            )}
+        <div className="flex bg-neutral-100 p-4 rounded-xl">
+            <div className="flex flex-grow gap-4 flex-col">
+                {candidates && candidates.length > 0 ? (
+                    candidates.map((candidate) => (
+                        <CandidateCard
+                            key={candidate.id}
+                            candidate={candidate}
+                            selectedCandidate={selectedCandidate}
+                            setSelectedCandidate={setSelectedCandidate}
+                        />
+                    ))
+                ) : (
+                    <div>No candidates available.</div>
+                )}
+            </div>
         </div>
     );
 }
