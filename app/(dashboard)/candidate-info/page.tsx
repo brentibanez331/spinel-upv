@@ -8,6 +8,7 @@ import { JSX } from "react/jsx-runtime";
 import { BriefcaseBusiness, CalendarFold, CircleChevronRight, CircleHelp, Landmark, MessageCircleQuestion, ScrollText, Sparkles, Vote } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
+
 import ChatSide from "@/components/chat-side";
 import { ChatMessageHistory } from "@/utils/types";
 
@@ -33,6 +34,7 @@ const CandidateInfo = () => {
         },
         {
             icon: <BriefcaseBusiness size={20} />,
+
             value: candidate?.personal_info[0].profession
         },
         // {
@@ -45,6 +47,7 @@ const CandidateInfo = () => {
         console.log(candidateId)
         const loadCandidate = async () => {
             console.log(candidate?.id)
+
             if (!candidateId) {
                 setError("No candidate ID provided.");
                 setLoading(false);
@@ -55,13 +58,16 @@ const CandidateInfo = () => {
             setError(null);
 
             const response = await fetchRequest("candidates");
+
             // console.log("Candidate:", JSON.stringify(response, null, 2));
 
             if (response.error) {
                 setError("Failed to load candidates");
             } else if (response.Candidate) {
                 const matchedCandidate = response.Candidate.find((c: Candidate) => c.id === candidateId);
+
                 console.log(matchedCandidate)
+
                 if (!matchedCandidate) {
                     setError("Candidate not found");
                 }
@@ -73,6 +79,9 @@ const CandidateInfo = () => {
 
         loadCandidate();
     }, [candidateId]);
+
+    // add skeleton
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 

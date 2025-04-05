@@ -23,6 +23,8 @@ export default function UserDashboard() {
         if (selectedCandidate) {
             const gender = selectedCandidate.personal_info[0].sex === 'M' ? 'his' : 'her'
 
+            setChatHistory([{role: 'AI', message: `Nakita ko na interesado ka na malaman patungkol kay ${selectedCandidate.display_name}. Ano ang gusto mong malaman?`}])
+
             setSuggestions([
                 `Who is ${selectedCandidate.display_name}?`,
                 `What are ${gender} current platforms?`,
@@ -51,9 +53,9 @@ export default function UserDashboard() {
     }
 
     return (
-        <div className="flex">
-            <div className="flex flex-grow bg-neutral-100 p-4 rounded-xl py-10">
-                <div className="flex w-full gap-4 flex-col">
+        <div className="flex h-screen overflow-y-hidden">
+            <div className="flex h-11/12 mt-10 bg-neutral-100 overflow-y-auto p-4 w-full rounded-xl py-10">
+                <div className="flex w-full gap-4 flex-col  ">
                     {candidates && candidates.length > 0 ? (
                         candidates.map((candidate) => (
                             <CandidateCard
@@ -69,7 +71,10 @@ export default function UserDashboard() {
                 </div>
             </div>
             <ChatSide
+
+                candidate={selectedCandidate}
                 suggestions={suggestions}
+                setSuggestions={setSuggestions}
                 chatHistory={chatHistory}
                 setChatHistory={setChatHistory}
             />

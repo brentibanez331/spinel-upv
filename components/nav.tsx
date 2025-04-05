@@ -1,6 +1,6 @@
 'use client'
 
-import { Menu, Rocket } from "lucide-react";
+import { BotMessageSquare, Menu, Rocket, User, Vote } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname, useSelectedLayoutSegments } from "next/navigation";
@@ -28,13 +28,19 @@ export default function Nav({ children, params }: { children: ReactNode, params:
                 name: 'Ballot Builder',
                 href: '/ballot',
                 isActive: segments[0] === "ballot",
-                icon: <Rocket width={18} />
+                icon: <Vote width={18} />
+            },
+            {
+                name: 'AIRegister',
+                href: '/ballot',
+                isActive: segments[0] === "ballot",
+                icon: <BotMessageSquare width={18} />
             },
             {
                 name: 'My Profile',
                 href: '/profile',
                 isActive: segments[0] === "profile",
-                icon: <Rocket width={18} />
+                icon: <User width={18} />
             }
         ]
     }, [segments, id])
@@ -56,8 +62,8 @@ export default function Nav({ children, params }: { children: ReactNode, params:
                 className={`transform ${showSidebar ? "w-full translate-x-0" : "-translate-x-full"
                     } fixed z-10 flex h-full flex-col justify-between border-stone-200 bg-white transition-all sm:w-60 sm:translate-x-0`}
             >
-                <div className="flex grid w-max flex-col items-center gap-2 sm:w-60 mx-4">
-                    <div className="flex flex-col items-center justify-center space-x-2 space-y-4 rounded-lg px-4 pb-2 pt-6 sm:w-60">
+                <div className="flex grid w-max flex-col items-center gap-2 sm:w-52 mx-4">
+                    <div className="flex flex-col items-center justify-center space-x-2 space-y-4 rounded-lg px-4 pb-2 pt-6 sm:w-52">
                     </div>
 
                     <div className="grid">
