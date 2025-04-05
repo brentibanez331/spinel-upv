@@ -1,6 +1,6 @@
 'use client'
 
-import { Menu, Rocket } from "lucide-react";
+import { BotMessageSquare, Menu, Rocket, User, Vote } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname, useSelectedLayoutSegments } from "next/navigation";
@@ -28,13 +28,19 @@ export default function Nav({ children, params }: { children: ReactNode, params:
                 name: 'Ballot Builder',
                 href: '/ballot',
                 isActive: segments[0] === "ballot",
-                icon: <Rocket width={18} />
+                icon: <Vote width={18} />
+            },
+            {
+                name: 'AIRegister',
+                href: '/ballot',
+                isActive: segments[0] === "ballot",
+                icon: <BotMessageSquare width={18} />
             },
             {
                 name: 'My Profile',
                 href: '/profile',
                 isActive: segments[0] === "profile",
-                icon: <Rocket width={18} />
+                icon: <User width={18} />
             }
         ]
     }, [segments, id])
