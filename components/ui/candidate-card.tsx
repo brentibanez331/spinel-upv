@@ -29,13 +29,14 @@ export const CandidateCard = ({
     setSelectedCandidate
 }: CandidateCardProps) => {
     const isMale = candidate.personal_info[0].sex!.toLowerCase() === "m";
+    const router = useRouter()
 
     const [isTap, setIsTap] = useState(false)
 
     return (
         <div className='cursor-pointerflex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
             {/*Go to next page on click */}
-            <div onClick={() => router.push(`/user/dashboard/candidate-info?candidateId=${candidateId || ''}`)} className="flex flex-row">
+            <div onClick={() => router.push(`/user/dashboard/candidate-info?candidateId=${candidate.id || ''}`)} className="flex flex-row">
                 {/* candidate image */}
                 <div className="flex-none bg-gray-400 h-24 w-24 rounded-lg ">
 
