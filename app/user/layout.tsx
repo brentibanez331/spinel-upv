@@ -26,9 +26,9 @@ export default async function UserLayout({ children }: { children: ReactNode }) 
             </Suspense>
         </Nav>
 
-        <div className="min-h-screen w-full sm:pl-60 sm:pr-96 py-10">
+        <div className="min-h-screen w-full sm:pl-60 sm:pr-96">
             {children}
         </div>
-        <ChatSide />
+        
     </div>);
 }

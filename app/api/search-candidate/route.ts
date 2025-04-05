@@ -47,9 +47,7 @@ export async function POST(req: NextRequest) {
 
     const toolChainResult = await toolChain.invoke(body.input);
 
-    console.log(toolChainResult)
-
-    return NextResponse.json({ data: toolChainResult, status: 200 });
+    return NextResponse.json({ data: toolChainResult.content, status: 200 });
   } catch (error) {
     console.error("Chat endpoint error: ", error);
     return NextResponse.json(
