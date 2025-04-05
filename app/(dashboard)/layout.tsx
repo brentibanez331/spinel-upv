@@ -29,6 +29,5 @@ export default async function UserLayout({ children }: { children: ReactNode }) 
         <div className="min-h-screen w-full sm:pl-60 sm:pr-96">
             {children}
         </div>
-        
     </div>);
 }

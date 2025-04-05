@@ -7,6 +7,9 @@ import { Candidate } from "@/components/model/models";
 import ChatSide from "@/components/chat-side";
 import { ChatMessageHistory } from "@/utils/types";
 
+
+import { Skeleton } from "@/components/ui/skeleton";
+
 export default function UserDashboard() {
     const [candidates, setCandidates] = useState<Candidate[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -68,6 +71,7 @@ export default function UserDashboard() {
                 </div>
             </div>
             <ChatSide
+
                 candidate={selectedCandidate}
                 suggestions={suggestions}
                 setSuggestions={setSuggestions}
