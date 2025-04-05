@@ -1,6 +1,7 @@
 "use client"
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from "next/navigation";
 
 import { useState, useEffect } from 'react';
 import { IoIosInformationCircleOutline } from "react-icons/io";
@@ -10,9 +11,11 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Ellipsis, Icon } from 'lucide-react';
 import { IoMale, IoFemale } from "react-icons/io5";
+import CandidateInfo from '@/app/user/dashboard/candidate-info/page';
 
 
 interface CandidateCardProps {
+    candidateId?: string,
     imgUrl?: string;
     displayName: string,
     politicalParty?: string;
@@ -33,6 +36,7 @@ interface CandidateCardProps {
 
 export const CandidateCard = ({
     //candidate info
+    candidateId,
     imgUrl,
     displayName,
     politicalParty,
@@ -51,7 +55,7 @@ export const CandidateCard = ({
     registeredVoterOf
 }: CandidateCardProps) => {
     const isMale = sex?.toLowerCase() === "m";
-
+    const router = useRouter();
     const [isTap, setIsTap] = useState(false)
 
     useEffect(() => {
@@ -72,9 +76,9 @@ export const CandidateCard = ({
         "Registered Voter Of": registeredVoterOf,
     };
     return (
-        <div className='flex flex-col shadow-lg bg-white rounded-lg min-w-[18rem] w-full p-4 gap-2'>
-
-            <div onClick={() => { }} className=" flex flex-row ">
+        <div className='cursor-pointerflex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
+            {/*Go to next page on click */}
+            <div onClick={() => router.push(`/user/dashboard/candidate-info?candidateId=${candidateId || ''}`)} className="flex flex-row">
                 {/* candidate image */}
                 <div className="flex-none bg-gray-400 h-24 w-24 rounded-lg ">
 

@@ -7,6 +7,7 @@ export interface Candidate {
   political_party?: string;
   image_path?: string;
   image_url?: string;
+  year?: string;
   personal_info?: PersonalInfo;
   candidacies?: Candidacy[];
 }
