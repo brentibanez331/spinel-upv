@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Ellipsis, Icon } from 'lucide-react';
 import { IoMale, IoFemale } from "react-icons/io5";
 
-import CandidateInfo from '@/app/user/candidate-info/page'
+import CandidateInfo from '@/app/(dashboard)/candidate-info/page'
 import { Candidate } from '../model/models';
 import { filter } from 'cheerio/dist/commonjs/api/traversing';
 
@@ -42,7 +42,7 @@ export const CandidateCard = ({
     return (
         <div className='cursor-pointerflex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
             {/*Go to next page on click */}
-            <div onClick={() => router.push(`/user/candidate-info?candidateId=${candidate.id}`)} className="flex flex-row">
+            <div onClick={() => router.push(`/candidate-info?candidateId=${candidate.id}`)} className="flex flex-row">
                 {/* candidate image */}
                 <div className="relative flex-none bg-gray-400 h-24 w-24 rounded-lg ">
 
