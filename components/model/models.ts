@@ -4,6 +4,7 @@ export interface Candidate {
   id: string;
   full_name: string;
   display_name: string;
+
   political_party: string;
   image_url: string;
   personal_info: PersonalInfo[];
