@@ -1,14 +1,14 @@
-// UserDashboard.tsx
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { fetchRequest } from "@/utils/database/fetch-request"; // Adjust the import based on the correct path
+import { fetchRequest } from "@/utils/database/fetch-request";
 import { CandidateCard } from "@/components/ui/candidate-card";
 import { Candidate } from "@/components/model/models";
 import ChatSide from "@/components/chat-side";
 import { ChatMessageHistory } from "@/utils/types";
 
 
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UserDashboard() {
     const [candidates, setCandidates] = useState<Candidate[] | null>(null);
@@ -45,10 +45,6 @@ export default function UserDashboard() {
 
         loadCandidates();
     }, []); // Empty dependency array to run only on mount
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
 
     if (error) {
         return <div>{error}</div>;
