@@ -10,6 +10,7 @@ export default function UserDashboard() {
     const [candidates, setCandidates] = useState<Candidate[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null)
 
     useEffect(() => {
         const loadCandidates = async () => {
@@ -62,16 +63,11 @@ export default function UserDashboard() {
                     candidates && candidates.length > 0 ? (
                         candidates.map((candidate) => (
                             <CandidateCard
-                                candidateId={candidate.candidacies?.[0].candidate_id}
-                                key={candidate.id}
-                                imgUrl={candidate.image_url}
-                                displayName={candidate.display_name}
-                                politicalParty={candidate.political_party || "N/A"}
-                                positionSought={candidate.candidacies?.[0]?.position_sought || "Unknown"}
-                                sex={candidate.personal_info?.sex || "Not Specified"}
-                                profession={candidate.personal_info?.profession || "Not Specified"}
-                                periodOfResidence={candidate.candidacies?.[0]?.period_of_residence || "Not Specified"}
-                            />
+                            key={candidate.id}
+                            candidate={candidate}
+                            selectedCandidate={selectedCandidate}
+                            setSelectedCandidate={setSelectedCandidate}
+                        />
                         ))
                     ) : (
                         <div>No candidates available.</div>

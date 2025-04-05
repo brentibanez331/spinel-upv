@@ -23,6 +23,7 @@ const CreateCandidateFormSchema = z.object({
   birthplace: z.string().min(1, { message: "Birthplace is required" }),
   residence: z.string().min(1, { message: "Residence is required" }),
   sex: z.string().min(1, { message: "Sex is required" }),
+  year: z.string().min(1, {message: "Year is required"}),
   civilStatus: z.string().min(1, { message: "Civil status is required" }),
   spouse: z.string().optional(),
   profession: z.string().min(1, { message: "Profession is required" }),
@@ -51,6 +52,7 @@ export default function CandidatePage() {
       birthplace: "",
       residence: "",
       sex: "",
+      year: "",
       civilStatus: "",
       spouse: "",
       profession: "",
@@ -93,6 +95,7 @@ export default function CandidatePage() {
       id: candidateId,
       full_name: values.fullName,
       display_name: values.displayName,
+      year: values.year,
       political_party: values.politicalParty,
       image_path: imagePath
     }).select('id').single()
@@ -296,6 +299,18 @@ export default function CandidatePage() {
               render={({ field }) => (
                 <FormItem className="space-y-1">
                   <FormLabel className="text-sm font-bold">Profession</FormLabel>
+                  <FormControl>
+                    <Input className="w-[300px]" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}>
+            </FormField>
+            <FormField
+              control={form.control}
+              name="year"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-sm font-bold">Year</FormLabel>
                   <FormControl>
                     <Input className="w-[300px]" {...field} />
                   </FormControl>

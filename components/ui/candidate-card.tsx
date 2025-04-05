@@ -11,70 +11,27 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Ellipsis, Icon } from 'lucide-react';
 import { IoMale, IoFemale } from "react-icons/io5";
+
 import CandidateInfo from '@/app/user/dashboard/candidate-info/page';
+import { Candidate } from '../model/models';
 
 
 interface CandidateCardProps {
-    candidateId?: string,
-    imgUrl?: string;
-    displayName: string,
-    politicalParty?: string;
-
-    birthdate?: string,
-    ageOnElection?: number,
-    birthplace?: string,
-    residence?: string,
-    sex?: string;
-    civilStatus?: string,
-    Spouse?: string,
-    profession?: string,
-
-    positionSought?: string,
-    periodOfResidence?: string,
-    registeredVoterOf?: string
+    candidate: Candidate
+    selectedCandidate: Candidate | null
+    setSelectedCandidate: (value: Candidate) => void
 }
 
 export const CandidateCard = ({
     //candidate info
-    candidateId,
-    imgUrl,
-    displayName,
-    politicalParty,
-    //personal info
-    birthdate,
-    ageOnElection,
-    birthplace,
-    residence,
-    sex,
-    civilStatus,
-    Spouse,
-    profession,
-    //candidacy info
-    positionSought,
-    periodOfResidence,
-    registeredVoterOf
+    candidate,
+    selectedCandidate,
+    setSelectedCandidate
 }: CandidateCardProps) => {
-    const isMale = sex?.toLowerCase() === "m";
-    const router = useRouter();
+    const isMale = candidate.personal_info[0].sex!.toLowerCase() === "m";
+
     const [isTap, setIsTap] = useState(false)
 
-    useEffect(() => {
-        console.log("Image URL:", imgUrl);
-    }, [imgUrl]);
-
-    const candidateDetails: Record<string, string | number | undefined> = {
-        positionSought: positionSought,
-        Birthdate: birthdate,
-        "Age on Election": ageOnElection,
-        Birthplace: birthplace,
-        Residence: residence,
-        // Sex: sex,
-        "Civil Status": civilStatus,
-        Spouse: Spouse,
-        Profession: profession,
-        "Period of Residence": periodOfResidence,
-        "Registered Voter Of": registeredVoterOf,
-    };
     return (
         <div className='cursor-pointerflex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
             {/*Go to next page on click */}
@@ -82,9 +39,9 @@ export const CandidateCard = ({
                 {/* candidate image */}
                 <div className="flex-none bg-gray-400 h-24 w-24 rounded-lg ">
 
-                    {typeof imgUrl === "string" ? (
+                    {typeof candidate.image_url === "string" ? (
                         <Image
-                            src={imgUrl}
+                            src={candidate.image_url}
                             alt="Candidate Image"
                             width={96}
                             height={96}
@@ -100,7 +57,7 @@ export const CandidateCard = ({
                     {/* candidate name */}
                     <div className='flex flex-row items-center gap-2'>
                         <div className="text-black font-bold text-xl">
-                            {displayName}
+                            {candidate.display_name}
                         </div>
                         {isMale ? (
                             <IoMale className="text-blue-600 text-lg" />
@@ -110,12 +67,7 @@ export const CandidateCard = ({
                     </div>
                     {/* You might want to display the other properties too */}
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap text-gray-600 text-sm">
-                        {politicalParty} | {positionSought}
-                    </div>
-                    <div className="flex flex-wrap gap-1 pt-2">
-                        {Object.entries(candidateDetails).map(([key, value]) => (
-                            value ? <FilterContainer key={key} filter={String(value)} /> : null
-                        ))}
+                        {candidate.political_party} | {candidate.candidacy[0].position_sought}
                     </div>
                 </div>
             </div>
@@ -127,9 +79,14 @@ export const CandidateCard = ({
                             See more
                         </p>
                 </div> */}
-                <Button className='rounded-full' variant="outline" size="sm">
+                <Button
+                    className='rounded-full'
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {setSelectedCandidate(candidate)}}
+                >
                     <p className='font-bold text-sm'>
-                        Ask Yano
+                        Itanong kay Yano
                     </p>
                 </Button>
                 <Ellipsis className="text-black" size={18} />
