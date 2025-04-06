@@ -53,8 +53,8 @@ export default function UserDashboard() {
     }
 
     return (
-        <div className="flex h-screen overflow-y-hidden">
-            <div className="flex h-11/12 mt-10 bg-neutral-100 overflow-y-auto p-4 w-full rounded-xl py-10">
+        <div className="flex flex-grow sm:pr-96">
+            <div className="flex h-full mt-10 bg-neutral-100 overflow-y-auto p-4 w-full rounded-xl py-10">
                 <div className="flex w-full gap-4 flex-col  ">
                     {candidates && candidates.length > 0 ? (
                         candidates.map((candidate) => (

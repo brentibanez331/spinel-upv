@@ -12,8 +12,8 @@ export function Chat() {
         initialMessages: initialMessages
     });
     return (
-        <div className="rounded-2xl border h-[75vh] flex flex-col justify-between">
-            <div className="p-6 overflow-auto">
+        <div className="rounded-2xl border h-full flex flex-col">
+            <div className="p-6 overflow-y-auto flex-grow h-1/2">
                 {messages.map(({ id, role, content }: Message, index) => (
                     <ChatBubble
                         key={id}
@@ -24,7 +24,7 @@ export function Chat() {
                 ))}
             </div>
 
-            <form onSubmit={handleSubmit} className="p-4 flex clear-both">
+            <form onSubmit={handleSubmit} className="p-4 flex clear-both h-[100px]">
                 <Input
                     onChange={handleInputChange}
                     value={input}

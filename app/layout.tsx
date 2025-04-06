@@ -7,6 +7,7 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
+import Image from "next/image";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -40,20 +41,22 @@ export default function RootLayout({
           <main className="min-h-screen flex flex-col items-center">
 
             <div className="flex-1 w-full flex flex-col items-center">
-              {/* {children} */}
-              {/* <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm flex-wrap">
+              <nav className="w-full fixed left-0 z-[999] bg-white flex justify-center h-16">
+                <div className="w-full flex justify-between items-center p-3 px-5 text-sm flex-wrap">
                   <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"}>Next.js Supabase Starter</Link>
-                    <div className="flex items-center gap-2">
-                      <DeployButton />
-                    </div>
+                    <Image
+                      src={"/logo.png"}
+                      alt=""
+                      width={40}
+                      height={50}
+                    />
+                    <p>Botwise</p>
                   </div>
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
                 </div>
               </nav>
-               */}
-               <div className="flex w-full">
+              
+               <div className="flex w-full pt-10">
                 {children}
               </div>
             </div>

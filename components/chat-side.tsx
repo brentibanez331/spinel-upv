@@ -1,8 +1,12 @@
+"use client"
+
 import { Send } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { ChatMessageHistory } from "@/utils/types";
 import { Candidate } from "./model/models";
+import { useState } from "react";
+import Image from "next/image";
 
 interface ChatSideProps {
     candidate: Candidate | null
@@ -13,6 +17,8 @@ interface ChatSideProps {
 }
 
 export default function ChatSide({ candidate, suggestions, setSuggestions, chatHistory, setChatHistory }: ChatSideProps) {
+    const [question, setQuestion] = useState<string>('')
+
     const promptSearch = async (question: string) => {
         setSuggestions([])
         const updatedHistory = [...chatHistory, { role: 'user', message: question }];
@@ -20,9 +26,14 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
 
         if (candidate) {
             question = question.replace('his', `${candidate.display_name}'s`)
-            question = question.replace('her', `${candidate.display_name}'s`)
+                .replace('her', `${candidate.display_name}'s`)
+                .replace('', `${candidate.display_name}'s`)
 
-            console.log(question)
+            const tagalogPronounExists = question.includes('kanyang') || question.includes('kaniyang') || question.includes('kaniya')
+            if(tagalogPronounExists){
+                const newQuestion = question.replace('kanyang', '').replace('kaniyang', '').replace('kanya', '').replace('?', '')
+                question = `${newQuestion} ni ${candidate.display_name}?`
+            }
 
             const response = await fetch('/api/search-candidate', {
                 method: 'POST',
@@ -43,17 +54,30 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
     }
 
     return (
-        <div className="w-[380px] flex flex-col px-4 py-10 fixed right-0 h-screen">
-            <div>Chat</div>
+        <div className="w-[380px] bg-white flex flex-col px-4 py-10 fixed right-0 h-[94%]">
+            <div className="flex space-x-4">
+                <Image
+                    src={"/logo.png"}
+                    alt=""
+                    width={30}
+                    height={50} />
+                <div className="flex flex-col justify-between">
+                    <p className="font-bold text-xl">Gabay</p>
+                    <p className="text-xs text-neutral-600">Ang iyong kasama ngayong botohan</p>
+                </div>
+
+            </div>
             {candidate ? (
                 <div className="h-[500px] overflow-y-auto py-3 flex flex-col-reverse w-full my-8 rounded-xl">
 
                     <div className="flex w-full items-end flex-col space-y-2 pt-4">
+
                         {suggestions && suggestions.map((suggestion) => (
                             <Button
                                 key={suggestion}
                                 onClick={() => promptSearch(suggestion)}
                                 className="w-auto text-xs rounded-xl text-end items-center hover:border-blue-500 transition whitespace-normal break-words h-auto py-2" variant={'outline'}>
+                                {/* Suggestion displays should be translated on render */}
                                 {suggestion}
                             </Button>
                         ))}
@@ -78,7 +102,7 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
                 </div>
             ) : (
                 <div className="bg-neutral-100 rounded-2xl py-2 px-3 mt-10 text-sm">
-                    Kumusta! Ako si Yano. Narito ako ngayon para sagutin kahit anong mga tanong meron ka para sa mga kandidato.
+                    Kumusta! Ako si Gabay. Narito ako ngayon para sagutin kahit anong mga tanong meron ka para sa mga kandidato.
                     <br />
                     <br />
                     Matutulungan kita sa masusunod:
@@ -88,8 +112,18 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
 
             {candidate ? (
                 <div className="relative">
-                    <Textarea placeholder="Ilapag ang iyong mga tanong..." />
-                    <Send className="absolute right-4 bottom-4 cursor-pointer" />
+                    <Textarea
+
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        placeholder="Ilapag ang iyong mga tanong..." />
+                    <Send onClick={() => {
+                        if (question) {
+                            promptSearch(question)
+                            setQuestion("")
+                        }
+
+                    }} className="absolute right-4 bottom-4 cursor-pointer" />
 
                 </div>
             ) : (

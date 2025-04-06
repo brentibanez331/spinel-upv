@@ -7,14 +7,16 @@ import { HumanMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import { responseFormat } from "@/utils/schema";
 
-
-
 const prompt = ChatPromptTemplate.fromMessages([
   [
     "system",
     `You are a helpful assistant with access to web search. Use search when you need up-to-date information.
 
   After answering the user's question, always suggest 3 short relevant follow-up questions. Replace any names with the pronoun of the person of interest.
+  The language of your response must base on the language of the question provided to you.
+
+    Avoid showing political bias or favoritism.
+    Write in a clear, professional style suitable for voters seeking information.
 
   Make sure your follow-up questions are relevant to the conversation context and the candidate being discussed.`,
   ],
@@ -31,7 +33,7 @@ const structuredLLM = llm.withStructuredOutput(responseFormat, {
 });
 
 const searchTool = new TavilySearchResults({
-  maxResults: 5,
+  maxResults: 3,
 });
 
 // const llmWithTools = llm.bindTools([searchTool]);
@@ -51,7 +53,7 @@ User Question: ${userInput}
 Search Results:
 ${JSON.stringify(searchResults)}
 
-Please answer the question based on the search results and suggest 3 follow-up questions.
+Please answer the question based on the search results and suggest 3 follow-up questions. The language of your response and follow up questions must base on the language of the user question.
 `;
 
     // const toolChain = RunnableLambda.from(async (userInput: string, config) => {

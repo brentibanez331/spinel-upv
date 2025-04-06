@@ -1,3 +1,4 @@
+
 "use client"
 import React from 'react';
 import Image from 'next/image';
@@ -7,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { IoMale, IoFemale } from "react-icons/io5";
 
 import { Candidate } from '../model/models';
+import { Sparkles } from 'lucide-react';
 
 
 interface CandidateCardProps {
@@ -33,7 +35,7 @@ export const CandidateCard = ({
     ];
 
     return (
-        <div className='cursor-pointerflex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
+        <div className='cursor-pointer flex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
             {/*Go to next page on click */}
             <div onClick={() => router.push(`/candidate-info?candidateId=${candidate.id}`)} className="flex flex-row">
                 {/* candidate image */}
@@ -82,16 +84,42 @@ export const CandidateCard = ({
 
                 </div>
             </div>
+          )}
+        </div>
+        <div className="flex flex-col ml-2 w-[calc(100%-7rem)]">
+          {/* candidate name */}
+          <div className="flex flex-row items-center gap-2">
+            <div className="text-black font-bold text-xl">{displayName}</div>
+            {isMale ? (
+              <IoMale className="text-blue-600 text-lg" />
+            ) : (
+              <IoFemale className="text-pink-600 text-lg" />
+            )}
+          </div>
+          {/* You might want to display the other properties too */}
+          <div className="overflow-hidden text-ellipsis whitespace-nowrap text-gray-600 text-sm">
+            {politicalParty} | {positionSought}
+          </div>
+          <div className="flex flex-wrap gap-1 pt-2">
+            {Object.entries(candidateDetails).map(([key, value]) =>
+              value ? (
+                <FilterContainer key={key} filter={String(value)} />
+              ) : null
+            )}
+          </div>
+        </div>
+      </div>
 
             <div className='flex flex-row justify-end items-center space-x-4'>
                 <Button
-                    className='rounded-full'
+                    className='space-x-2 rounded-full'
                     variant="outline"
                     size="sm"
                     onClick={() => { setSelectedCandidate(candidate) }}
                 >
+                    <Sparkles size={20} />
                     <p className='font-bold text-sm'>
-                        Itanong kay Yano
+                        Itanong kay Gabay
                     </p>
                 </Button>
                 {/* <Ellipsis className="text-black" size={18} /> */}
