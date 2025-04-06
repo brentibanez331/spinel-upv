@@ -1,4 +1,3 @@
-import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
 import { Pencil, XCircle } from "lucide-react";
 import React from "react";
 
@@ -119,27 +118,28 @@ export default function PDFFileUpload({
           </div>
         </div>
       ) : (
-        <UploadButton
-          className="ut-allowed-content:hidden"
-          endpoint={endpoint}
-          onClientUploadComplete={(res) => {
-            const item = res[0];
-            const url = {
-              url: item.url,
-              title: item.name,
-              size: item.size,
-              type: item.type,
-            };
-            setFile(url);
-            console.log(url);
-            console.log(res);
-            console.log("Upload Completed");
-          }}
-          onUploadError={(error) => {
-            toast.error("File Upload Failed, Try Again");
-            console.log(`ERROR! ${error.message}`, error);
-          }}
-        />
+        // <UploadButton
+        //   className="ut-allowed-content:hidden"
+        //   endpoint={endpoint}
+        //   onClientUploadComplete={(res) => {
+        //     const item = res[0];
+        //     const url = {
+        //       url: item.url,
+        //       title: item.name,
+        //       size: item.size,
+        //       type: item.type,
+        //     };
+        //     setFile(url);
+        //     console.log(url);
+        //     console.log(res);
+        //     console.log("Upload Completed");
+        //   }}
+        //   onUploadError={(error) => {
+        //     toast.error("File Upload Failed, Try Again");
+        //     console.log(`ERROR! ${error.message}`, error);
+        //   }}
+        // />
+        <></>
       )}
     </div>
   );
