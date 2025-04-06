@@ -1,3 +1,4 @@
+
 "use client"
 import React from 'react';
 import Image from 'next/image';
@@ -82,6 +83,31 @@ export const CandidateCard = ({
 
                 </div>
             </div>
+          )}
+        </div>
+        <div className="flex flex-col ml-2 w-[calc(100%-7rem)]">
+          {/* candidate name */}
+          <div className="flex flex-row items-center gap-2">
+            <div className="text-black font-bold text-xl">{displayName}</div>
+            {isMale ? (
+              <IoMale className="text-blue-600 text-lg" />
+            ) : (
+              <IoFemale className="text-pink-600 text-lg" />
+            )}
+          </div>
+          {/* You might want to display the other properties too */}
+          <div className="overflow-hidden text-ellipsis whitespace-nowrap text-gray-600 text-sm">
+            {politicalParty} | {positionSought}
+          </div>
+          <div className="flex flex-wrap gap-1 pt-2">
+            {Object.entries(candidateDetails).map(([key, value]) =>
+              value ? (
+                <FilterContainer key={key} filter={String(value)} />
+              ) : null
+            )}
+          </div>
+        </div>
+      </div>
 
             <div className='flex flex-row justify-end items-center space-x-4'>
                 <Button
