@@ -31,7 +31,7 @@ export default function Nav({ children, params }: { children: ReactNode, params:
                 icon: <Vote width={18} />
             },
             {
-                name: 'Chat',
+                name: 'GabayChat',
                 href: '/chat',
                 isActive: segments[0] === "ballot",
                 icon: <BotMessageSquare width={18} />

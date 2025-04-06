@@ -23,9 +23,37 @@ const CandidateInfo = () => {
     const [candidate, setCandidate] = useState<Candidate | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null)
+    const [summary, setSummary] = useState<string>('')
+
     const [suggestions, setSuggestions] = useState<string[]>([])
     const [chatHistory, setChatHistory] = useState<ChatMessageHistory[]>([])
+    
+
+    const generateSummary = async () => {
+        if(candidate){
+            const question = `Who is ${candidate.display_name}`
+
+            const response = await fetch('/api/candidate-summary', 
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({input: question})
+                }
+            )
+
+            const rawResponse = await response.json()
+            setSummary(rawResponse.data)
+        }
+    }
+
+    useEffect(() => {
+        if(candidate){
+            generateSummary()
+        }
+    }, [candidate])
+
 
     const detailsMap: DetailItem[] = [
         {
@@ -87,7 +115,7 @@ const CandidateInfo = () => {
 
     return (
         <div className="flex flex-grow">
-            <div className="flex-col w-full p-4 bg-neutral-100">
+            <div className="flex-col w-full p-4 sm:pr-96">
                 <div className="rounded-lg bg-white space-y-4 p-4">
                     <Image src={candidate?.image_url || ''} alt="Candidate Image" width={96} height={96} className="rounded-lg" />
                     <h2 className="font-bold text-xl">{candidate?.full_name}</h2>
@@ -112,9 +140,7 @@ const CandidateInfo = () => {
                             </h1>
                         </div>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            {summary}
                         </p>
                     </div>
                     <div className="flex flex-col">
@@ -125,7 +151,7 @@ const CandidateInfo = () => {
                             </div>
                             <Button variant="outline" className="rounded-full flex flex-row space-x-2">
                                 <Sparkles size={20} />
-                                <p>Itanong Kay Yano</p>
+                                <p>Itanong kay Gabay</p>
                             </Button>
                         </div>
                     </div>
@@ -173,7 +199,7 @@ const CandidateInfo = () => {
                 </div>
             </div>
             <ChatSide
-                candidate={selectedCandidate}
+                candidate={candidate}
                 suggestions={suggestions}
                 setSuggestions={setSuggestions}
                 chatHistory={chatHistory}

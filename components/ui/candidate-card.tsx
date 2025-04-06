@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { IoMale, IoFemale } from "react-icons/io5";
 
 import { Candidate } from '../model/models';
+import { Sparkles } from 'lucide-react';
 
 
 interface CandidateCardProps {
@@ -85,13 +86,14 @@ export const CandidateCard = ({
 
             <div className='flex flex-row justify-end items-center space-x-4'>
                 <Button
-                    className='rounded-full'
+                    className='space-x-2 rounded-full'
                     variant="outline"
                     size="sm"
                     onClick={() => { setSelectedCandidate(candidate) }}
                 >
+                    <Sparkles size={20} />
                     <p className='font-bold text-sm'>
-                        Itanong kay Yano
+                        Itanong kay Gabay
                     </p>
                 </Button>
                 {/* <Ellipsis className="text-black" size={18} /> */}
