@@ -5,7 +5,7 @@ import { fetchRequest } from "@/utils/database/fetch-request";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { JSX } from "react/jsx-runtime";
-import { BriefcaseBusiness, CalendarFold, CircleChevronRight, CircleHelp, Landmark, MessageCircleQuestion, ScrollText, Sparkles, Vote } from "lucide-react";
+import { BriefcaseBusiness, CircleHelp, Landmark, ScrollText, Sparkles } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
 
@@ -23,7 +23,7 @@ const CandidateInfo = () => {
     const [candidate, setCandidate] = useState<Candidate | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-
+    const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null)
     const [suggestions, setSuggestions] = useState<string[]>([])
     const [chatHistory, setChatHistory] = useState<ChatMessageHistory[]>([])
 
@@ -173,7 +173,9 @@ const CandidateInfo = () => {
                 </div>
             </div>
             <ChatSide
+                candidate={selectedCandidate}
                 suggestions={suggestions}
+                setSuggestions={setSuggestions}
                 chatHistory={chatHistory}
                 setChatHistory={setChatHistory}
             />
