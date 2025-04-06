@@ -20,7 +20,7 @@ export default function Nav({ children, params }: { children: ReactNode, params:
         return [
             {
                 name: 'Candidates',
-                href: '/candidates',
+                href: '/dashboard',
                 isActive: segments[0] === "candidates",
                 icon: <Rocket width={18} />
             },
@@ -31,8 +31,8 @@ export default function Nav({ children, params }: { children: ReactNode, params:
                 icon: <Vote width={18} />
             },
             {
-                name: 'AIRegister',
-                href: '/ballot',
+                name: 'Chat',
+                href: '/chat',
                 isActive: segments[0] === "ballot",
                 icon: <BotMessageSquare width={18} />
             },

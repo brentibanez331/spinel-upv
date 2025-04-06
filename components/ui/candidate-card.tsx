@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Ellipsis, Icon } from 'lucide-react';
 import { IoMale, IoFemale } from "react-icons/io5";
 
-import CandidateInfo from '@/app/user/dashboard/candidate-info/page';
+import CandidateInfo from '@/app/(dashboard)/candidate-info/page';
 import { Candidate } from '../model/models';
 
 
@@ -34,7 +34,7 @@ export const CandidateCard = ({
     const [isTap, setIsTap] = useState(false)
 
     return (
-        <div className='cursor-pointerflex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
+        <div className='cursor-pointer flex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
             {/*Go to next page on click */}
             <div onClick={() => router.push(`/user/dashboard/candidate-info?candidateId=${candidate.id || ''}`)} className="flex flex-row">
                 {/* candidate image */}
@@ -68,7 +68,7 @@ export const CandidateCard = ({
                     </div>
                     {/* You might want to display the other properties too */}
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap text-gray-600 text-sm">
-                        {candidate.political_party} | {candidate.candidacy[0].position_sought}
+                        {candidate.political_party} | {candidate.candidacy.toString()}
                     </div>
                 </div>
             </div>

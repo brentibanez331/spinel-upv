@@ -1,8 +1,11 @@
+"use client"
+
 import { Send } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { ChatMessageHistory } from "@/utils/types";
 import { Candidate } from "./model/models";
+import { useState } from "react";
 
 interface ChatSideProps {
     candidate: Candidate | null
@@ -13,6 +16,8 @@ interface ChatSideProps {
 }
 
 export default function ChatSide({ candidate, suggestions, setSuggestions, chatHistory, setChatHistory }: ChatSideProps) {
+    const [question, setQuestion] = useState<string>()
+
     const promptSearch = async (question: string) => {
         setSuggestions([])
         const updatedHistory = [...chatHistory, { role: 'user', message: question }];
@@ -49,11 +54,13 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
                 <div className="h-[500px] overflow-y-auto py-3 flex flex-col-reverse w-full my-8 rounded-xl">
 
                     <div className="flex w-full items-end flex-col space-y-2 pt-4">
+
                         {suggestions && suggestions.map((suggestion) => (
                             <Button
                                 key={suggestion}
                                 onClick={() => promptSearch(suggestion)}
                                 className="w-auto text-xs rounded-xl text-end items-center hover:border-blue-500 transition whitespace-normal break-words h-auto py-2" variant={'outline'}>
+                                {/* Suggestion displays should be translated on render */}
                                 {suggestion}
                             </Button>
                         ))}
@@ -88,7 +95,11 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
 
             {candidate ? (
                 <div className="relative">
-                    <Textarea placeholder="Ilapag ang iyong mga tanong..." />
+                    <Textarea
+
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        placeholder="Ilapag ang iyong mga tanong..." />
                     <Send className="absolute right-4 bottom-4 cursor-pointer" />
 
                 </div>
