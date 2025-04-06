@@ -5,7 +5,7 @@ import { fetchRequest } from "@/utils/database/fetch-request";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { JSX } from "react/jsx-runtime";
-import { BriefcaseBusiness, CircleHelp, Landmark, ScrollText, Sparkles } from "lucide-react";
+import { BriefcaseBusiness, CircleHelp, Landmark, Languages, ScrollText, Sparkles } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
 
@@ -24,22 +24,23 @@ const CandidateInfo = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [summary, setSummary] = useState<string>('')
+    const [isTagalog, setIsTagalog] = useState<boolean>(false)
 
     const [suggestions, setSuggestions] = useState<string[]>([])
     const [chatHistory, setChatHistory] = useState<ChatMessageHistory[]>([])
-    
+
 
     const generateSummary = async () => {
-        if(candidate){
+        if (candidate) {
             const question = `Who is ${candidate.display_name}`
 
-            const response = await fetch('/api/candidate-summary', 
+            const response = await fetch('/api/candidate-summary',
                 {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({input: question})
+                    body: JSON.stringify({ input: question })
                 }
             )
 
@@ -49,7 +50,16 @@ const CandidateInfo = () => {
     }
 
     useEffect(() => {
-        if(candidate){
+        if (candidate) {
+            const gender = candidate.personal_info[0].sex === 'M' ? 'his' : 'her'
+
+            setChatHistory([{ role: 'AI', message: `Nakita ko na interesado ka na malaman patungkol kay ${candidate.display_name}. Ano ang gusto mong malaman?` }])
+
+            setSuggestions([
+                `Who is ${candidate.display_name}?`,
+                `What are ${gender} current platforms?`,
+                `What are some of ${gender} previous projects?`
+            ])
             generateSummary()
         }
     }, [candidate])
@@ -133,17 +143,22 @@ const CandidateInfo = () => {
                         )}
                     </div>
                     <div className="flex flex-col bg-neutral-100 rounded-lg p-4 space-y-4">
-                        <div className="flex flex-row items-center ">
-                            <Sparkles size={20} />
-                            <h1 className="font-bold text-lg ml-1">
-                                AI Summary
-                            </h1>
+                        <div className="flex justify-between">
+                            <div className="flex flex-row items-center ">
+                                <Sparkles size={20} />
+                                <h1 className="font-bold text-lg ml-1">
+                                    AI Summary
+                                </h1>
+                            </div>
+                            <Button size={"icon"} variant={"secondary"}>
+                                <Languages className={`${isTagalog ? 'text-neutral-800' : 'text-neutral-400'} hover:text-neutral-800 transition`} />
+                            </Button>
                         </div>
                         <p>
                             {summary}
                         </p>
                     </div>
-                    <div className="flex flex-col">
+                    {/* <div className="flex flex-col">
                         <div className="flex flex-row justify-between items-center px-3 w-full py-3 rounded-lg bg-gray-100">
                             <div className="flex flex-row space-x-1">
                                 <CircleHelp />
@@ -154,7 +169,7 @@ const CandidateInfo = () => {
                                 <p>Itanong kay Gabay</p>
                             </Button>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="flex flex-col justify-start items-start text-sm space-y-2">
                         <div className="flex flex-row items-center">
                             <div className="hidden md:flex">

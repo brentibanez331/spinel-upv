@@ -16,7 +16,7 @@ export default async function UserLayout({ children }: { children: ReactNode }) 
     } = await supabase.auth.getUser();
 
     if (!user) {
-        return redirect('/login');
+        return redirect('/sign-in');
     }
 
     return (<div className='flex w-screen'>

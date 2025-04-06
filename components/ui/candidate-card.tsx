@@ -30,7 +30,7 @@ export const CandidateCard = ({
         { key: "Profession", value: candidate.personal_info[0]?.profession },
         { key: "Position Sought", value: candidate.candidacy[0]?.position_sought },
         { key: "Political Party", value: candidate.political_party },
-        { key: "Civil Status", value: candidate.personal_info[0]?.civil_status }
+        // { key: "Civil Status", value: candidate.personal_info[0]?.civil_status }
     ];
 
     return (
