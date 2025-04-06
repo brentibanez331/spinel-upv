@@ -10,6 +10,7 @@ import { ChatMessageHistory } from "@/utils/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import Loader from "@/components/loader/loader";
 
 export default function UserDashboard() {
     const [candidates, setCandidates] = useState<Candidate[] | null>(null);
@@ -141,9 +142,7 @@ export default function UserDashboard() {
                             />
                         ))
                     ) : (
-                        <div className="text-center py-8 text-neutral-500">
-                            {searchQuery ? "No candidates match your search." : "No candidates available."}
-                        </div>
+                        <Loader />
                     )}
                 </div>
             </div>

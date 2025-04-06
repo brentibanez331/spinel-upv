@@ -1,24 +1,27 @@
 "use client";
 import Image from "next/image";
+
 import { Candidate } from "@/components/model/models";
 import { fetchRequest } from "@/utils/database/fetch-request";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { JSX } from "react/jsx-runtime";
 import { BriefcaseBusiness, CircleHelp, Landmark, Languages, ScrollText, Sparkles } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import ChatSide from "@/components/chat-side";
 import { ChatMessageHistory } from "@/utils/types";
+import { motion } from "framer-motion";
 
 interface DetailItem {
     icon: JSX.Element;
     value: string | number | undefined;
 }
 const CandidateInfo = () => {
-    const searchParams = useSearchParams();
-    const candidateId = searchParams.get("candidateId");
+    const params = useParams();
+    const candidateId = params.id;
 
     const [candidate, setCandidate] = useState<Candidate | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -51,6 +54,7 @@ const CandidateInfo = () => {
 
     useEffect(() => {
         if (candidate) {
+
             const gender = candidate.personal_info[0].sex === 'M' ? 'his' : 'her'
 
             setChatHistory([{ role: 'AI', message: `Nakita ko na interesado ka na malaman patungkol kay ${candidate.display_name}. Ano ang gusto mong malaman?` }])
@@ -60,6 +64,7 @@ const CandidateInfo = () => {
                 `What are ${gender} current platforms?`,
                 `What are some of ${gender} previous projects?`
             ])
+
             generateSummary()
         }
     }, [candidate])
@@ -82,9 +87,10 @@ const CandidateInfo = () => {
     ]
 
     useEffect(() => {
-        console.log(candidateId)
+        console.log(params)
+        // console.log(candidateId)
         const loadCandidate = async () => {
-            console.log(candidate?.id)
+            // console.log(candidate?.id)
 
             if (!candidateId) {
                 setError("No candidate ID provided.");
@@ -154,9 +160,35 @@ const CandidateInfo = () => {
                                 <Languages className={`${isTagalog ? 'text-neutral-800' : 'text-neutral-400'} hover:text-neutral-800 transition`} />
                             </Button>
                         </div>
-                        <p>
-                            {summary}
-                        </p>
+                        {summary ?
+                            (<p>{summary}</p>) :
+                            (<div className="flex flex-col space-y-2">
+                                <motion.div
+                                    className="h-4 w-full bg-neutral-200 rounded-md"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <Skeleton />
+                                </motion.div>
+                                <motion.div
+                                    className="h-4 w-11/12 bg-neutral-200 rounded-md"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.1 }}
+                                >
+                                    <Skeleton />
+                                </motion.div>
+                                <motion.div
+                                    className="h-4 w-10/12 bg-neutral-200 rounded-md"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                >
+                                    <Skeleton />
+                                </motion.div>
+                            </div>)
+                        }
                     </div>
                     {/* <div className="flex flex-col">
                         <div className="flex flex-row justify-between items-center px-3 w-full py-3 rounded-lg bg-gray-100">

@@ -16,7 +16,7 @@ export const fetchRequest = async (
       candidacy (*)
     `);
 
-  console.log(candidates)
+  // console.log(candidates)
 
   if (error) {
     console.log(error);
