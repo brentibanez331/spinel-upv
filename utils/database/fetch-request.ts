@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
-import { Candidate, PersonalInfo, Candidacy } from "@/components/model/models";
+import { Candidate } from "@/components/model/models";
 
 export const fetchRequest = async (
   table: string
@@ -9,68 +9,39 @@ export const fetchRequest = async (
     return { Candidate: null, error: "Missing table name" };
   }
 
-  // Fetch candidates
-  const { data: candidates, error: candidatesError } = await createClient()
-    .from(table)
-    .select();
+  // Single query to fetch candidates with related data
+  const { data: candidates, error } = await createClient().from(table).select(`
+      *,
+      personal_info (*),
+      candidacy (*)
+    `);
 
-  if (candidatesError) {
-    console.log(candidatesError);
-    return { Candidate: null, error: candidatesError };
+  console.log(candidates)
+
+  if (error) {
+    console.log(error);
+    return { Candidate: null, error };
   }
 
-  // Fetch related personal info for each candidate
-  const candidatesWithPersonalInfo = await Promise.all(
-    candidates?.map(async (candidate: Candidate) => {
-      const { data: personalInfo, error: personalInfoError } =
-        await createClient()
-          .from("personal_info")
-          .select()
-          .eq("candidate_id", candidate.id)
-          .single();
+  // Process image URLs in a single loop
+  const candidatesWithImages = await Promise.all(
+    candidates.map(async (candidate) => {
+      let imageUrl = undefined;
 
-      if (personalInfoError) {
-        console.log(personalInfoError);
-      }
-
-      // Fetch related candidacy for each candidate
-      const { data: candidacies, error: candidaciesError } =
-        await createClient()
-          .from("candidacy")
-          .select()
-          .eq("candidate_id", candidate.id);
-
-      if (candidaciesError) {
-        console.log(candidaciesError);
-      }
-
-      let imageUrl: string | undefined = undefined;
       if (candidate.image_path) {
         const { data } = await createClient()
           .storage.from("images")
           .getPublicUrl(candidate.image_path);
 
-        // Check if the data contains the public URL
-        if (data?.publicUrl) {
-          imageUrl = data.publicUrl;
-        } else {
-          console.log(
-            `No public URL found for image path ${candidate.image_path}`
-          );
-        }
-      } else {
-        console.log(`No image path found for candidate ID ${candidate.id}`);
+        imageUrl = data?.publicUrl;
       }
 
       return {
         ...candidate,
-        personal_info: personalInfo || null,
-        candidacies: candidacies || [],
         image_url: imageUrl,
       };
     })
   );
 
-  console.log(candidatesWithPersonalInfo);
-  return { Candidate: candidatesWithPersonalInfo, error: null };
+  return { Candidate: candidatesWithImages, error: null };
 };

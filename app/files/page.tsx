@@ -1,7 +1,7 @@
 "use client"
 
 import { Input } from "@/components/ui/input"
-import { createClient } from "@/supabase/functions/client"
+import { createClient } from "@/utils/supabase/client"
 
 
 export default function Page() {
