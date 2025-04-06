@@ -1,24 +1,27 @@
 "use client";
 import Image from "next/image";
+
 import { Candidate } from "@/components/model/models";
 import { fetchRequest } from "@/utils/database/fetch-request";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { JSX } from "react/jsx-runtime";
 import { BriefcaseBusiness, CircleHelp, Landmark, ScrollText, Sparkles } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import ChatSide from "@/components/chat-side";
 import { ChatMessageHistory } from "@/utils/types";
+import { motion } from "framer-motion";
 
 interface DetailItem {
     icon: JSX.Element;
     value: string | number | undefined;
 }
 const CandidateInfo = () => {
-    const searchParams = useSearchParams();
-    const candidateId = searchParams.get("candidateId");
+    const params = useParams();
+    const candidateId = params.id;
 
     const [candidate, setCandidate] = useState<Candidate | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -27,19 +30,19 @@ const CandidateInfo = () => {
 
     const [suggestions, setSuggestions] = useState<string[]>([])
     const [chatHistory, setChatHistory] = useState<ChatMessageHistory[]>([])
-    
+
 
     const generateSummary = async () => {
-        if(candidate){
+        if (candidate) {
             const question = `Who is ${candidate.display_name}`
 
-            const response = await fetch('/api/candidate-summary', 
+            const response = await fetch('/api/candidate-summary',
                 {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({input: question})
+                    body: JSON.stringify({ input: question })
                 }
             )
 
@@ -49,7 +52,7 @@ const CandidateInfo = () => {
     }
 
     useEffect(() => {
-        if(candidate){
+        if (candidate) {
             generateSummary()
         }
     }, [candidate])
@@ -72,9 +75,10 @@ const CandidateInfo = () => {
     ]
 
     useEffect(() => {
-        console.log(candidateId)
+        console.log(params)
+        // console.log(candidateId)
         const loadCandidate = async () => {
-            console.log(candidate?.id)
+            // console.log(candidate?.id)
 
             if (!candidateId) {
                 setError("No candidate ID provided.");
@@ -139,11 +143,37 @@ const CandidateInfo = () => {
                                 AI Summary
                             </h1>
                         </div>
-                        <p>
-                            {summary}
-                        </p>
+                        {summary ?
+                            (<p>{summary}</p>) :
+                            (<div className="flex flex-col space-y-2">
+                                <motion.div
+                                    className="h-4 w-full bg-neutral-200 rounded-md"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <Skeleton />
+                                </motion.div>
+                                <motion.div
+                                    className="h-4 w-11/12 bg-neutral-200 rounded-md"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.1 }}
+                                >
+                                    <Skeleton />
+                                </motion.div>
+                                <motion.div
+                                    className="h-4 w-10/12 bg-neutral-200 rounded-md"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                >
+                                    <Skeleton />
+                                </motion.div>
+                            </div>)
+                        }
                     </div>
-                    <div className="flex flex-col">
+                    {/* <div className="flex flex-col">
                         <div className="flex flex-row justify-between items-center px-3 w-full py-3 rounded-lg bg-gray-100">
                             <div className="flex flex-row space-x-1">
                                 <CircleHelp />
@@ -154,7 +184,7 @@ const CandidateInfo = () => {
                                 <p>Itanong kay Gabay</p>
                             </Button>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="flex flex-col justify-start items-start text-sm space-y-2">
                         <div className="flex flex-row items-center">
                             <div className="hidden md:flex">

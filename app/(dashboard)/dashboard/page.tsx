@@ -9,6 +9,7 @@ import { ChatMessageHistory } from "@/utils/types";
 
 
 import { Skeleton } from "@/components/ui/skeleton";
+import Loader from "@/components/loader/loader";
 
 export default function UserDashboard() {
     const [candidates, setCandidates] = useState<Candidate[] | null>(null);
@@ -23,7 +24,7 @@ export default function UserDashboard() {
         if (selectedCandidate) {
             const gender = selectedCandidate.personal_info[0].sex === 'M' ? 'his' : 'her'
 
-            setChatHistory([{role: 'AI', message: `Nakita ko na interesado ka na malaman patungkol kay ${selectedCandidate.display_name}. Ano ang gusto mong malaman?`}])
+            setChatHistory([{ role: 'AI', message: `Nakita ko na interesado ka na malaman patungkol kay ${selectedCandidate.display_name}. Ano ang gusto mong malaman?` }])
 
             setSuggestions([
                 `Who is ${selectedCandidate.display_name}?`,
@@ -53,9 +54,9 @@ export default function UserDashboard() {
     }
 
     return (
-        <div className="flex flex-grow sm:pr-96">
+        <div className="flex h-screen flex-grow sm:pr-96">
             <div className="flex h-full mt-10 bg-neutral-100 overflow-y-auto p-4 w-full rounded-xl py-10">
-                <div className="flex w-full gap-4 flex-col  ">
+                <div className="flex w-full gap-4 flex-col">
                     {candidates && candidates.length > 0 ? (
                         candidates.map((candidate) => (
                             <CandidateCard
@@ -66,7 +67,7 @@ export default function UserDashboard() {
                             />
                         ))
                     ) : (
-                        <div>No candidates available.</div>
+                        <Loader />
                     )}
                 </div>
             </div>

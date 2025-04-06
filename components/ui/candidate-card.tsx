@@ -36,7 +36,7 @@ export const CandidateCard = ({
     return (
         <div className='cursor-pointerflex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
             {/*Go to next page on click */}
-            <div onClick={() => router.push(`/candidate-info?candidateId=${candidate.id}`)} className="flex flex-row">
+            <div onClick={() => router.push(`/candidate/${candidate.id}`)} className="flex flex-row">
                 {/* candidate image */}
                 <div className="flex-none bg-gray-400 h-24 w-24 rounded-lg ">
 
@@ -68,7 +68,9 @@ export const CandidateCard = ({
                         }
                     </div>
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap text-gray-600 text-sm">
-                        {candidate.political_party} | {candidate.candidacy?.[0]?.position_sought}
+                        <p>{candidate.political_party}</p>
+                        <p>{candidate.candidacy?.[0]?.position_sought}</p>
+                        {/* {candidate.political_party} | {candidate.candidacy?.[0]?.position_sought} */}
                     </div>
                     <div className="flex flex-wrap gap-2 py-2">
                         {candidateDetails.map((detail) => (
