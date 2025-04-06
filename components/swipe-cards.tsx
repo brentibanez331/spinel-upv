@@ -9,6 +9,7 @@ import { Check } from "lucide-react";
 import { X } from "lucide-react";
 interface Card {
   id: string;
+  userId: string;
   imgUrl: string;
   displayName: string;
   politicalParty: string;
@@ -17,22 +18,20 @@ import { createClient } from "@/utils/supabase/client";
 
 export const SwipeCard = ({
   id,
+  userId,
   imgUrl,
   displayName,
   politicalParty,
   cards,
   setCards,
-  likedCandidates,
-  setLikedCandidates,
 }: {
   id: string;
+  userId: string;
   imgUrl: string;
   displayName: string;
   politicalParty: string;
   cards: Card[];
   setCards: Dispatch<SetStateAction<Card[]>>;
-  likedCandidates: string[];
-  setLikedCandidates: Dispatch<SetStateAction<string[]>>;
 }) => {
   const x = useMotionValue(0);
   const opacity = useTransform(x, [-150, 0, 150], [0, 1, 0]);
@@ -40,20 +39,10 @@ export const SwipeCard = ({
   const disLikedOpacity = useTransform(x, [0, -100], [0, 1]);
   const rotate = useTransform(x, [-150, 150], [-20, 20]);
   const [user, setUser] = useState<any>(null);
+  const [swipedCandidateId, setSwipedCandidateId] = useState<string | null>(
+    null
+  );
   const [isVisible, setIsVisible] = useState(false);
-  useEffect(() => {
-    const fetchData = async () => {
-      const supabase = await createClient();
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error("ERROR!", error.message);
-      }
-      setUser(data.user);
-      // console.log("User Data:", data.user);
-    };
-
-    fetchData();
-  }, []);
 
   useMotionValueEvent(x, "change", (latest) => console.log(latest));
 
@@ -64,20 +53,19 @@ export const SwipeCard = ({
     if (x.get() > 0) {
       // setLikedCandidates((prev) => [...prev, id]);
       // console.log("LIKE CANDIDATES: ", likedCandidates);
+      setSwipedCandidateId(id);
       const saveSwipeAction = async () => {
-        if (user) {
-          const supabase = createClient();
+        const supabase = createClient();
 
-          const { data, error } = await supabase.from("ballot").insert([
-            {
-              user_id: user.id,
-              candidate_id: id,
-            },
-          ]);
-          console.log("data", data);
-          if (error) {
-            console.error("Error saving swipe action:", error);
-          }
+        const { data, error } = await supabase.from("ballot").insert([
+          {
+            user_id: userId,
+            candidate_id: id,
+          },
+        ]);
+        console.log("DATA INSERTED");
+        if (error) {
+          console.error("Error saving swipe action:", error);
         }
       };
       setIsVisible(true);
@@ -85,14 +73,6 @@ export const SwipeCard = ({
     }
   };
 
-  // const handleLiked = () => {
-  //   if (x.get() > 0) {
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   console.log("LIKE CANDIDATES: ", likedCandidates);
-  // }, [likedCandidates]);
   return (
     <motion.div
       className="text-center absolute"
@@ -149,6 +129,7 @@ const SwipeCards = ({ candidates }: { candidates: Card[] }) => {
       {cards.length > 0 ? (
         cards.map((card) => (
           <SwipeCard
+            userId={card.userId}
             key={card.id}
             cards={cards}
             setCards={setCards}
@@ -156,8 +137,6 @@ const SwipeCards = ({ candidates }: { candidates: Card[] }) => {
             imgUrl={card.imgUrl}
             displayName={card.displayName}
             politicalParty={card.politicalParty}
-            likedCandidates={likedCandidates}
-            setLikedCandidates={setLikedCandidates}
           />
         ))
       ) : (

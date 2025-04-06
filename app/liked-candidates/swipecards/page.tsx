@@ -1,17 +1,19 @@
 "use client";
 
-import SwipeCards from "@/components/ui/swipe-cards";
+import SwipeCards from "@/components/swipe-cards";
 import { createClient } from "@/utils/supabase/client";
 import { useState, useEffect } from "react";
 import { Candidate } from "@/components/model/models";
 import { fetchRequest } from "@/utils/database/fetch-request";
-
+import { useRouter } from "next/navigation";
+import { MoonLoader } from "react-spinners";
 export default function SwipeCardsPage() {
   const [user, setUser] = useState<any>(null);
   const [likedCandidates, setLikedCandidates] = useState<string[]>([]);
   const [candidates, setCandidates] = useState<Candidate[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const loadCandidates = async () => {
@@ -70,25 +72,37 @@ export default function SwipeCardsPage() {
     loadUserLikedCandidates();
   }, [user]);
 
-  console.log("Liked Candidates:", likedCandidates);
-
   const filterLikedCandidates = candidates?.filter(
     (candidate) => !likedCandidates.includes(candidate.id)
   );
 
+  const swipeCardPage = () => {
+    router.push("/liked-candidates/ballot");
+  };
+
   return (
     <div>
-      {filterLikedCandidates && filterLikedCandidates.length > 0 ? (
-        <SwipeCards
-          candidates={filterLikedCandidates.map((candidate) => ({
-            id: candidate.id,
-            imgUrl: candidate.image_url || "N/A",
-            displayName: candidate.display_name,
-            politicalParty: candidate.political_party || "N/A",
-          }))}
-        />
+      {isLoading ? (
+        <div className="flex items-center justify-center h-screen">
+          <MoonLoader color="#000000" />
+        </div>
       ) : (
-        <div>No candidates available.</div>
+        <div>
+          <button onClick={swipeCardPage}>Ballot Mode</button>
+          {filterLikedCandidates && filterLikedCandidates.length > 0 ? (
+            <SwipeCards
+              candidates={filterLikedCandidates.map((candidate) => ({
+                id: candidate.id,
+                userId: user.id,
+                imgUrl: candidate.image_url || "N/A",
+                displayName: candidate.display_name,
+                politicalParty: candidate.political_party || "N/A",
+              }))}
+            />
+          ) : (
+            <div>No candidates available.</div>
+          )}
+        </div>
       )}
     </div>
   );
