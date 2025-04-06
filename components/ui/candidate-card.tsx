@@ -3,18 +3,10 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from "next/navigation";
 
-import { useState, useEffect } from 'react';
-import { IoIosInformationCircleOutline } from "react-icons/io";
-import { BsThreeDots } from "react-icons/bs";
-
-import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { Ellipsis, Icon } from 'lucide-react';
 import { IoMale, IoFemale } from "react-icons/io5";
 
-import CandidateInfo from '@/app/(dashboard)/candidate-info/page'
 import { Candidate } from '../model/models';
-import { filter } from 'cheerio/dist/commonjs/api/traversing';
 
 
 interface CandidateCardProps {
@@ -29,6 +21,7 @@ export const CandidateCard = ({
     selectedCandidate,
     setSelectedCandidate
 }: CandidateCardProps) => {
+
     const isMale = candidate.personal_info[0].sex!.toLowerCase() === "m";
     const router = useRouter()
 
@@ -44,13 +37,14 @@ export const CandidateCard = ({
             {/*Go to next page on click */}
             <div onClick={() => router.push(`/candidate-info?candidateId=${candidate.id}`)} className="flex flex-row">
                 {/* candidate image */}
-                <div className="relative flex-none bg-gray-400 h-24 w-24 rounded-lg ">
+                <div className="flex-none bg-gray-400 h-24 w-24 rounded-lg ">
 
                     {typeof candidate.image_url === "string" ? (
                         <Image
                             src={candidate.image_url}
                             alt="Candidate Image"
-                            fill={true}
+                            height={96}
+                            width={96}
                             className="rounded-lg"
 
                         />
@@ -72,9 +66,8 @@ export const CandidateCard = ({
                             <IoFemale className="text-pink-600 text-lg" />)
                         }
                     </div>
-                    {/* You might want to display the other properties too */}
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap text-gray-600 text-sm">
-                        {candidate.political_party} | {candidate.candidacy[0].position_sought}
+                        {candidate.political_party} | {candidate.candidacy?.[0]?.position_sought}
                     </div>
                     <div className="flex flex-wrap gap-2 py-2">
                         {candidateDetails.map((detail) => (
