@@ -4,16 +4,28 @@ import SwipeCards from "@/components/swipe-cards";
 import { createClient } from "@/utils/supabase/client";
 import { useState, useEffect } from "react";
 import { Candidate } from "@/components/model/models";
+import { User } from "@supabase/supabase-js";
 import { fetchRequest } from "@/utils/database/fetch-request";
 import { useRouter } from "next/navigation";
 import { MoonLoader } from "react-spinners";
 export default function SwipeCardsPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const supabase = createClient();
+
   const [likedCandidates, setLikedCandidates] = useState<string[]>([]);
   const [candidates, setCandidates] = useState<Candidate[] | null>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () =>{
+      const { data: {user} } = await supabase.auth.getUser()
+      setUser(user)
+    } 
+
+    fetchUser()
+  }, [])
 
   useEffect(() => {
     const loadCandidates = async () => {
@@ -29,19 +41,6 @@ export default function SwipeCardsPage() {
     loadCandidates();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const supabase = await createClient();
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error("ERROR!", error.message);
-      }
-      setUser(data.user);
-      console.log("User Data:", data.user);
-    };
-
-    fetchData();
-  }, []);
 
   // console.log("User:", user);
 
@@ -89,7 +88,7 @@ export default function SwipeCardsPage() {
       ) : (
         <div>
           <button onClick={swipeCardPage}>Ballot Mode</button>
-          {filterLikedCandidates && filterLikedCandidates.length > 0 ? (
+          {user && filterLikedCandidates && filterLikedCandidates.length > 0 ? (
             <SwipeCards
               candidates={filterLikedCandidates.map((candidate) => ({
                 id: candidate.id,

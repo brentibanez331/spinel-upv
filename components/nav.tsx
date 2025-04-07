@@ -30,25 +30,25 @@ export default function Nav({ children, params }: { children: ReactNode, params:
                 isActive: segments[0] === "chat",
                 icon: <BotMessageSquare width={18} />
             },
-            {
-                name: 'Candidate Builder',
-                href: '/candidate-builder',
-                isActive: segments[0] === "candidate-builder",
-                icon: <Vote width={18} />
-            },
-            {
-                name: 'My Favorites',
-                href: '/my-favorites',
-                isActive: segments[0] === "my-favorites",
-                icon: <Heart width={18} />
-            },
+            // {
+            //     name: 'Candidate Builder',
+            //     href: '/candidate-builder',
+            //     isActive: segments[0] === "candidate-builder",
+            //     icon: <Vote width={18} />
+            // },
+            // {
+            //     name: 'My Favorites',
+            //     href: '/my-favorites',
+            //     isActive: segments[0] === "my-favorites",
+            //     icon: <Heart width={18} />
+            // },
             
-            {
-                name: 'My Profile',
-                href: '/profile',
-                isActive: segments[0] === "profile",
-                icon: <User width={18} />
-            }
+            // {
+            //     name: 'My Profile',
+            //     href: '/profile',
+            //     isActive: segments[0] === "profile",
+            //     icon: <User width={18} />
+            // }
         ]
     }, [segments, id])
 

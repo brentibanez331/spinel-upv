@@ -64,6 +64,7 @@ export async function POST(req: NextRequest) {
       vectorStore,
       model,
     });
+
     console.log("message answer =>", stream);
     // console.log("message inquiry =>", inquiry);
     // Convert the stream using the new adapter
