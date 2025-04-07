@@ -43,8 +43,8 @@ export default async function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
             <div className="w-full h-screen flex flex-col items-center">
-              <nav className="w-full  fixed left-0 z-[999] items-center flex justify-center h-16">
-                <div className="w-full flex justify-between items-center py-6 px-8 sm:px-24 text-sm flex-wrap">
+              <nav className="w-full bg-white fixed left-0 z-[999] items-center flex justify-center h-16">
+                <div className="w-full flex justify-between items-center py-6 px-8 text-sm flex-wrap">
                   <div className=" flex gap-5 items-center font-semibold">
                     <Image
                           src={"/logo-gradient.png"}

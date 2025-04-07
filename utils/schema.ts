@@ -14,7 +14,7 @@ export const summaryFormat = z.object({
 
 
 export const skillFormat = z.object({
-    education: z.number().describe("The percentage of proficiency in education based on the baseline"),
-    experience: z.string().describe("The percentage of proficiency in career or experience based on the baseline")
-
+    education: z.number().describe("The percentage from 0-100 of proficiency in education based on the baseline"),
+    experience: z.number().describe("The percentage from 0-100 of proficiency in career or experience based on the baseline"),
+    platformAndAdvocacy: z.number().describe("The percentage from 0-100 of proficiency in policy alignment or platform and advocacy")
 })
