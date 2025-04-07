@@ -13,10 +13,12 @@ export const fetchRequest = async (
   const { data: candidates, error } = await createClient().from(table).select(`
       *,
       personal_info (*),
-      candidacy (*)
+      candidacy (*),
+      credentials (*)
     `);
 
   // console.log(candidates)
+  console.log("Candidate:", JSON.stringify(candidates, null, 2));
 
   if (error) {
     console.log(error);
