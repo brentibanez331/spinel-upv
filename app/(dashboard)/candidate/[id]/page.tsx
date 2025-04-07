@@ -34,6 +34,10 @@ const CandidateInfo = () => {
     const [suggestions, setSuggestions] = useState<string[]>([])
     const [chatHistory, setChatHistory] = useState<ChatMessageHistory[]>([])
 
+    const [experienceLevel, setExperienceLevel] = useState<number>(0)
+    const [educationLevel, setEducationLevel] = useState<number>(0)
+    const [advocacyLevel, setAdvocacyLevel] = useState<number>(0)
+
 
     const generateSummary = async () => {
         if (candidate) {
@@ -54,6 +58,30 @@ const CandidateInfo = () => {
         }
     }
 
+    const generateScores = async () => {
+        if (candidate) {
+            const response = await fetch('/api/score-candidate',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ input: candidate.display_name })
+                }
+            )
+
+            const rawResponse = await response.json()
+            console.log("Candidate score: ", rawResponse)
+            
+            setExperienceLevel(rawResponse.data.experience)
+            setEducationLevel(rawResponse.data.education)
+            setAdvocacyLevel(rawResponse.data.platform)
+
+        }
+
+
+    }
+
     useEffect(() => {
         if (candidate) {
 
@@ -68,6 +96,7 @@ const CandidateInfo = () => {
             ])
 
             generateSummary()
+            generateScores()
         }
     }, [candidate])
 
@@ -205,6 +234,20 @@ const CandidateInfo = () => {
                             <p>Experience</p>
                         </div>
                     </div> */}
+                    <div className="flex w-full justify-evenly py-10">
+                        <div className="flex flex-col space-y-2 items-center">
+                            <CircularProgressbar value={educationLevel} text={`${educationLevel}%`}  styles={{ root: { width: 100, height: 100 } }} />
+                            <p>Education</p>
+                        </div>
+                        <div className="flex flex-col space-y-2 items-center">
+                            <CircularProgressbar value={experienceLevel} text={`${experienceLevel}%`} styles={{ root: { width: 100, height: 100 } }} />
+                            <p>Experience</p>
+                        </div>
+                        <div className="flex flex-col space-y-2 items-center">
+                            <CircularProgressbar value={advocacyLevel} text={`${advocacyLevel}%`} styles={{ root: { width: 100, height: 100 } }} />
+                            <p>Platform and Advocacy</p>
+                        </div>
+                    </div>
                     {/* <div className="flex flex-col">
                         <div className="flex flex-row justify-between items-center px-3 w-full py-3 rounded-lg bg-gray-100">
                             <div className="flex flex-row space-x-1">
