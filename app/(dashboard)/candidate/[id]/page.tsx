@@ -14,8 +14,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import ChatSide from "@/components/chat-side";
 import { ChatMessageHistory } from "@/utils/types";
 import { motion } from "framer-motion";
-// import { CircularProgressbar } from "react-circular-progressbar";
-// import 'react-circular-progressbar/dist/styles.css';
+import { CircularProgressbar } from "react-circular-progressbar";
+import 'react-circular-progressbar/dist/styles.css';
 
 interface DetailItem {
     icon: JSX.Element;
@@ -72,7 +72,7 @@ const CandidateInfo = () => {
 
             const rawResponse = await response.json()
             console.log("Candidate score: ", rawResponse)
-            
+
             setExperienceLevel(rawResponse.data.experience)
             setEducationLevel(rawResponse.data.education)
             setAdvocacyLevel(rawResponse.data.platform)
@@ -236,7 +236,7 @@ const CandidateInfo = () => {
                     </div> */}
                     <div className="flex w-full justify-evenly py-10">
                         <div className="flex flex-col space-y-2 items-center">
-                            <CircularProgressbar value={educationLevel} text={`${educationLevel}%`}  styles={{ root: { width: 100, height: 100 } }} />
+                            <CircularProgressbar value={educationLevel} text={`${educationLevel}%`} styles={{ root: { width: 100, height: 100 } }} />
                             <p>Education</p>
                         </div>
                         <div className="flex flex-col space-y-2 items-center">
