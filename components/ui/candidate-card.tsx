@@ -30,11 +30,11 @@ export const CandidateCard = ({
         { key: "Profession", value: candidate.personal_info[0]?.profession },
         { key: "Position Sought", value: candidate.candidacy[0]?.position_sought },
         { key: "Political Party", value: candidate.political_party },
-        { key: "Civil Status", value: candidate.personal_info[0]?.civil_status }
+        // { key: "Civil Status", value: candidate.personal_info[0]?.civil_status }
     ];
 
     return (
-        <div className='cursor-pointerflex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
+        <div className='cursor-pointer flex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
             {/*Go to next page on click */}
             <div onClick={() => router.push(`/candidate/${candidate.id}`)} className="flex flex-row">
                 {/* candidate image */}
