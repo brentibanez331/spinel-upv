@@ -6,7 +6,7 @@ import { fetchRequest } from "@/utils/database/fetch-request";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { JSX } from "react/jsx-runtime";
-import { BriefcaseBusiness, Landmark, Languages, RefreshCw, ScrollText, Sparkles } from "lucide-react";
+import { BriefcaseBusiness, IdCard, Landmark, Languages, RefreshCw, ScrollText, Sparkles } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -14,8 +14,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import ChatSide from "@/components/chat-side";
 import { ChatMessageHistory } from "@/utils/types";
 import { motion } from "framer-motion";
-import { CircularProgressbar } from "react-circular-progressbar";
-import 'react-circular-progressbar/dist/styles.css';
+// import { CircularProgressbar } from "react-circular-progressbar";
+// import 'react-circular-progressbar/dist/styles.css';
 
 interface DetailItem {
     icon: JSX.Element;
@@ -118,7 +118,8 @@ const CandidateInfo = () => {
     ]
 
     useEffect(() => {
-        console.log(params)
+        console.log("credentials:", candidate?.credentials[0]?.education)
+        // console.log(params)
         // console.log(candidateId)
         const loadCandidate = async () => {
             // console.log(candidate?.id)
@@ -141,7 +142,7 @@ const CandidateInfo = () => {
             } else if (response.Candidate) {
                 const matchedCandidate = response.Candidate.find((c: Candidate) => c.id === candidateId);
 
-                console.log(matchedCandidate)
+                // console.log(matchedCandidate)
 
                 if (!matchedCandidate) {
                     setError("Candidate not found");
@@ -227,6 +228,12 @@ const CandidateInfo = () => {
                             </div>)
                         }
                     </div>
+                    {/* <div className="flex">
+                        <div className="flex flex-col space-y-2">
+                            <CircularProgressbar value={2} />
+                            <p>Experience</p>
+                        </div>
+                    </div> */}
                     <div className="flex w-full justify-evenly py-10">
                         <div className="flex flex-col space-y-2 items-center">
                             <CircularProgressbar value={educationLevel} text={`${educationLevel}%`}  styles={{ root: { width: 100, height: 100 } }} />
@@ -253,7 +260,7 @@ const CandidateInfo = () => {
                             </Button>
                         </div>
                     </div> */}
-                    <div className="flex flex-col justify-start items-start text-sm space-y-2">
+                    {/* <div className="flex flex-col justify-start items-start text-sm space-y-2">
                         <div className="flex flex-row items-center">
                             <div className="hidden md:flex">
                                 <ScrollText size={20} />
@@ -273,27 +280,71 @@ const CandidateInfo = () => {
                         <p>Sex: {candidate?.personal_info[0].sex}</p>
                         <p>Civil Status: {candidate?.personal_info[0].civil_status}</p>
                         <p>Spouse: {candidate?.personal_info[0].spouse}</p>
-                    </div>
-                    <div className="flex flex-col items-start text-sm">
-                        {/* <ScrollText size={30} /> */}
-                        <h1 className="text-lg font-bold">
-                            Credentials
-                        </h1>
-
-                        <div className="flex flex-col justify-start items-start text-sm space-y-2">
-                            <p>Residence: {candidate?.personal_info[0].residence}</p>
-                            <p>Birthplace: {candidate?.personal_info[0].birthplace}</p>
-                            <p>
-                                Birthdate: {candidate?.personal_info[0].birthdate
+                    </div> */}
+                    <div className="space-y-4 pt-4">
+                        <div className="flex flex-row items-center ">
+                            <ScrollText size={30} className="mr-2" />
+                            <h1 className="text-lg font-bold">
+                                Personal Info
+                            </h1>
+                        </div>
+                        <div className="grid grid-cols-[120px_1fr] gap-4 text-sm">
+                            <p className="font-semibold">Residence</p>
+                            <div className="space-y-1">
+                                {candidate?.personal_info[0].residence || 'N/A'}
+                            </div>
+                            <p className="font-semibold">Birthplace</p>
+                            <div className="space-y-1">
+                                {candidate?.personal_info[0].birthplace || 'N/A'}
+                            </div>
+                            <p className="font-semibold">Birthdate</p>
+                            <div className="space-y-1">
+                                {candidate?.personal_info[0].birthdate
                                     ? new Date(candidate.personal_info[0].birthdate).toLocaleDateString()
                                     : "N/A"}
-                            </p>
-                            <p>Age: {candidate?.personal_info[0].age_on_election_day}</p>
-                            <p>Sex: {candidate?.personal_info[0].sex}</p>
-                            <p>Civil Status: {candidate?.personal_info[0].civil_status}</p>
-                            <p>Spouse: {candidate?.personal_info[0].spouse}</p>
+                            </div>
+                            <p className="font-semibold">Age</p>
+                            <div className="space-y-1">
+                                {candidate?.personal_info[0].age_on_election_day || 'N/A'}
+                            </div>
+                            <p className="font-semibold">Sex</p>
+                            <div className="space-y-1">
+                                {candidate?.personal_info[0].sex || 'N/A'}
+                            </div>
+                            <p className="font-semibold">Civil Status</p>
+                            <div className="space-y-1">
+                                {candidate?.personal_info[0].civil_status || 'N/A'}
+                            </div>
+                            <p className="font-semibold">Spouse</p>
+                            <div className="space-y-1">
+                                {candidate?.personal_info[0].spouse || 'N/A'}
+                            </div>
                         </div>
                     </div>
+                    <div className="space-y-4 pt-4">
+                        <div className="flex flex-row items-center">
+                            <IdCard size={30} className="mr-2" />
+                            <h1 className="text-lg font-bold">Credentials</h1>
+                        </div>
+
+                        <div className="grid grid-cols-[120px_1fr] gap-4 text-sm ">
+                            <p className="font-semibold">Education</p>
+                            <div className="space-y-1">
+                                {candidate?.credentials?.[0]?.education.map((item, index) => (
+                                    <p key={index}>{item}</p>
+                                ))}
+                            </div>
+                            <p className="font-semibold">Positions Held</p>
+                            <div className="space-y-1">
+
+                                {candidate?.credentials?.[0]?.positions_held.map((item, index) => (
+                                    <p key={index}>{item} </p>
+                                ))}
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <ChatSide
