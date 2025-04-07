@@ -71,6 +71,7 @@ const CandidateInfo = () => {
             )
 
             const rawResponse = await response.json()
+            console.log("Candidate score: ", rawResponse)
             
             setExperienceLevel(rawResponse.data.experience)
             setEducationLevel(rawResponse.data.education)
@@ -94,7 +95,7 @@ const CandidateInfo = () => {
                 `What are some of ${gender} previous projects?`
             ])
 
-            // generateSummary()
+            generateSummary()
             generateScores()
         }
     }, [candidate])
