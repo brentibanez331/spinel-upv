@@ -1,5 +1,7 @@
-export default function CandidateBuilder(){
+export default function CandidateBuilder() {
     return (
-        <div>Candidate Builder</div>
+        <div className="pt-10">
+            
+        </div>
     )
 }

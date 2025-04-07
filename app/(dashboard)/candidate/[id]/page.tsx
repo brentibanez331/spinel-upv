@@ -6,7 +6,7 @@ import { fetchRequest } from "@/utils/database/fetch-request";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { JSX } from "react/jsx-runtime";
-import { BriefcaseBusiness, CircleHelp, Landmark, Languages, RefreshCw, ScrollText, Sparkles } from "lucide-react";
+import { BriefcaseBusiness, Landmark, Languages, RefreshCw, ScrollText, Sparkles } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -14,6 +14,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import ChatSide from "@/components/chat-side";
 import { ChatMessageHistory } from "@/utils/types";
 import { motion } from "framer-motion";
+import { CircularProgressbar } from "react-circular-progressbar";
+import 'react-circular-progressbar/dist/styles.css';
 
 interface DetailItem {
     icon: JSX.Element;
@@ -65,7 +67,7 @@ const CandidateInfo = () => {
                 `What are some of ${gender} previous projects?`
             ])
 
-            generateSummary()
+            // generateSummary()
         }
     }, [candidate])
 
@@ -195,6 +197,12 @@ const CandidateInfo = () => {
                                 </motion.div>
                             </div>)
                         }
+                    </div>
+                    <div className="flex">
+                        <div className="flex flex-col space-y-2">
+                            <CircularProgressbar value={2}/>
+                            <p>Experience</p>
+                        </div>
                     </div>
                     {/* <div className="flex flex-col">
                         <div className="flex flex-row justify-between items-center px-3 w-full py-3 rounded-lg bg-gray-100">
