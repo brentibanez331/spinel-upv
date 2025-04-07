@@ -12,9 +12,9 @@ export const summaryFormat = z.object({
     tagalogSummary: z.string().describe("The tagalog version of the subject's summary")
 })
 
-
 export const skillFormat = z.object({
-    education: z.number().describe("The percentage from 0-100 of proficiency in education based on the baseline"),
-    experience: z.number().describe("The percentage from 0-100 of proficiency in career or experience based on the baseline"),
-    platformAndAdvocacy: z.number().describe("The percentage from 0-100 of proficiency in policy alignment or platform and advocacy")
-})
+    education: z.number().describe("Score from 0 to 100 based on the strength and relevance of the candidate's academic background."),
+    experience: z.number().describe("Score from 0 to 100 based on the candidate's leadership, public service, or career achievements."),
+    platformAndAdvocacy: z.number().describe("Score from 0 to 100 based on how clear, relevant, and actionable the candidate’s platform and advocacy are.")
+  });
+  
