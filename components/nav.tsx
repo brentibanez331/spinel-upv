@@ -66,7 +66,7 @@ export default function Nav({ children, params }: { children: ReactNode, params:
             </button>
 
             <div
-                className={`transform ${showSidebar ? "w-full translate-x-0" : "-translate-x-full"
+                className={`transform ${showSidebar ? "w-full translate-x-0" : "-translate-x-full pt-10"
                     } fixed z-10 flex h-full flex-col justify-between border-stone-200 bg-white transition-all sm:w-60 sm:translate-x-0`}
             >
                 <div className="flex grid w-max flex-col items-center gap-2 sm:w-52 mx-4">

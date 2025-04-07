@@ -1,6 +1,6 @@
 "use client"
 
-import { Send } from "lucide-react";
+import { Ellipsis, Send } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { ChatMessageHistory } from "@/utils/types";
@@ -18,11 +18,13 @@ interface ChatSideProps {
 
 export default function ChatSide({ candidate, suggestions, setSuggestions, chatHistory, setChatHistory }: ChatSideProps) {
     const [question, setQuestion] = useState<string>('')
+    const [isGenerating, setIsGenerating] = useState<boolean>(false)
 
     const promptSearch = async (question: string) => {
         setSuggestions([])
         const updatedHistory = [...chatHistory, { role: 'user', message: question }];
         setChatHistory(updatedHistory)
+        setIsGenerating(true)
 
         if (candidate) {
             question = question.replace('his', `${candidate.display_name}'s`)
@@ -48,6 +50,7 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
             console.log(rawResponse.data)
 
             setChatHistory([...updatedHistory, { role: 'AI', message: rawResponse.data.answer }])
+            setIsGenerating(false)
 
             setSuggestions(rawResponse.data.questions)
         }
@@ -98,6 +101,11 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
                                 )}
                             </div>
                         ))}
+                        {isGenerating && (
+                            <div className="flex space-x-1 text-sm animate-pulse bg-neutral-100 rounded-2xl py-2 px-3">
+                                 <p>Thinking</p><Ellipsis className="text-neutral-500"/>
+                            </div>
+                        )}
                     </div>
                 </div>
             ) : (

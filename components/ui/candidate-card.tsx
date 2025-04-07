@@ -34,7 +34,7 @@ export const CandidateCard = ({
     ];
 
     return (
-        <div className='cursor-pointerflex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
+        <div className='cursor-pointer flex flex-col shadow-lg bg-white hover:bg-gray-50 rounded-lg min-w-[18rem] w-full p-4 gap-2'>
             {/*Go to next page on click */}
             <div onClick={() => router.push(`/candidate/${candidate.id}`)} className="flex flex-row">
                 {/* candidate image */}

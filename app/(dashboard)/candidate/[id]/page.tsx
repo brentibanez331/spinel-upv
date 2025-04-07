@@ -6,7 +6,7 @@ import { fetchRequest } from "@/utils/database/fetch-request";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { JSX } from "react/jsx-runtime";
-import { BriefcaseBusiness, CircleHelp, Landmark, Languages, ScrollText, Sparkles } from "lucide-react";
+import { BriefcaseBusiness, CircleHelp, Landmark, Languages, RefreshCw, ScrollText, Sparkles } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -150,11 +150,17 @@ const CandidateInfo = () => {
                     </div>
                     <div className="flex flex-col bg-neutral-100 rounded-lg p-4 space-y-4">
                         <div className="flex justify-between">
-                            <div className="flex flex-row items-center ">
+                            <div className="flex items-center ">
                                 <Sparkles size={20} />
-                                <h1 className="font-bold text-lg ml-1">
-                                    AI Summary
-                                </h1>
+                                <div className="font-bold text-lg ml-1 flex space-x-4">
+                                    <p>AI Summary</p>
+                                    {!summary && (
+                                        <div className="flex items-center space-x-1">
+                                            <RefreshCw size={14} className="text-neutral-500 animate-spin" /> <p className="text-sm font-normal text-neutral-500"> Generating</p>
+                                        </div>
+                                    )}
+
+                                </div>
                             </div>
                             <Button size={"icon"} variant={"secondary"}>
                                 <Languages className={`${isTagalog ? 'text-neutral-800' : 'text-neutral-400'} hover:text-neutral-800 transition`} />

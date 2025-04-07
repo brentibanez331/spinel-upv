@@ -56,7 +56,7 @@ export default function RootLayout({
                 </div>
               </nav>
               
-               <div className="flex w-full justify-center pt-10">
+               <div className="flex w-full justify-center">
                 {children}
               </div>
             </div>
