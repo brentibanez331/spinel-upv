@@ -15,8 +15,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "BotWais by Spinel",
+  description: "",
 };
 
 const geistSans = Geist({
@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body className="bg-background text-foreground" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -39,26 +39,23 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className="min-h-screen flex flex-col items-center">
-
             <div className="flex-1 w-full flex flex-col items-center">
-              <nav className="w-full fixed left-0 z-[999] bg-white flex justify-center h-16">
-                <div className="w-full flex justify-between items-center p-3 px-5 text-sm flex-wrap">
+              <nav className="w-full fixed left-0 z-[999]  flex justify-center h-16">
+                <div className="w-full flex justify-between items-center py-6 px-24 text-sm flex-wrap">
                   <div className="flex gap-5 items-center font-semibold">
                     <Image
-                      src={"/logo.png"}
+                      src={"/logo-white.png"}
                       alt=""
-                      width={40}
-                      height={50}
+                      width={1000}
+                      height={1000}
+                      className="z-10 h-[35px] w-auto  object-contain "
                     />
-                    <p>Botwise</p>
                   </div>
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
                 </div>
               </nav>
-              
-               <div className="flex w-full pt-10">
-                {children}
-              </div>
+
+              <div className="flex w-full">{children}</div>
             </div>
           </main>
         </ThemeProvider>
