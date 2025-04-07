@@ -80,13 +80,13 @@ export default function SwipeCardsPage() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center pt-8 w-full h-screen">
       {isLoading ? (
         <div className="flex items-center justify-center h-screen">
           <MoonLoader color="#000000" />
         </div>
       ) : (
-        <div>
+        <div className="">
           <button onClick={swipeCardPage}>Ballot Mode</button>
           {user && filterLikedCandidates && filterLikedCandidates.length > 0 ? (
             <SwipeCards

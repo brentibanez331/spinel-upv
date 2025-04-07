@@ -108,9 +108,9 @@ export const SwipeCard = ({
           alt={`Candidate ${displayName}`}
         />
 
-        <motion.div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent rounded-b-xl" />
+        <motion.div className="absolute bottom-0 left-0 w-full h-full rounded-b-xl" />
 
-        <p className="absolute bottom-12 left-4 text-sm text-white">
+        <p className="absolute bg-black p-2  bottom-12 left-4 text-sm text-white">
           {displayName}
         </p>
         <p className="absolute bottom-8 left-4 text-xs text-white">
