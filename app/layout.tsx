@@ -46,7 +46,13 @@ export default async function RootLayout({
               <nav className="w-full  fixed left-0 z-[999] items-center flex justify-center h-16">
                 <div className="w-full flex justify-between items-center py-6 px-8 sm:px-24 text-sm flex-wrap">
                   <div className=" flex gap-5 items-center font-semibold">
-                    <DynamicLogo />
+                    <Image
+                          src={"/logo-gradient.png"}
+                          alt="Logo"
+                          width={1000}
+                          height={1000}
+                          className="z-10 h-[30px] sm:h-[35px] w-auto object-contain"
+                        />
                   </div>
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
                 </div>

@@ -11,3 +11,10 @@ export const summaryFormat = z.object({
     englishSummary: z.string().describe("The english version of the subject's summary"),
     tagalogSummary: z.string().describe("The tagalog version of the subject's summary")
 })
+
+
+export const skillFormat = z.object({
+    education: z.number().describe("The percentage of proficiency in education based on the baseline"),
+    experience: z.string().describe("The percentage of proficiency in career or experience based on the baseline")
+
+})

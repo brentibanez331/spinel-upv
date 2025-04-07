@@ -6,7 +6,7 @@ import { fetchRequest } from "@/utils/database/fetch-request";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { JSX } from "react/jsx-runtime";
-import { BriefcaseBusiness, CircleHelp, Landmark, Languages, RefreshCw, ScrollText, Sparkles } from "lucide-react";
+import { BriefcaseBusiness, Landmark, Languages, RefreshCw, ScrollText, Sparkles } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
