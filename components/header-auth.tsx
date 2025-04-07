@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
+import DynamicButton from "@/components/dynamic-button";
 
 export default async function AuthButton() {
   const supabase = await createClient();
@@ -59,18 +60,9 @@ export default async function AuthButton() {
     </div>
   ) : (
     <div className="flex gap-6">
+      <DynamicButton />
       <Button
-        className="font-bold rounded-full px-6"
-        asChild
-        size="sm"
-        variant={"ghost"}
-      >
-        <Link className="text-white" href="/sign-in">
-          Sign in
-        </Link>
-      </Button>
-      <Button
-        className="bg-[#ffa600] hover:bg-[#ff8c00] px-6 rounded-full font-bold text-[#0C40BB]"
+        className="bg-[#ffa600] hover:bg-[#ff8c00] px-4 sm:px-6 rounded-full font-bold text-[#0C40BB]"
         asChild
         size="sm"
       >
