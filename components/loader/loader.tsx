@@ -11,7 +11,7 @@ export default function Loader() {
                 repeatType: "loop",
                 ease: "easeInOut",
             }}
-            className="flex justify-center items-center w-full h-full"
+            className="flex justify-center items-center w-11/12 h-full"
         >
             <Image
                 src="/logo.png"

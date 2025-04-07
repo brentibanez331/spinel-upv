@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { ShaderGradientCanvas, ShaderGradient } from "@shadergradient/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
