@@ -16,7 +16,7 @@ export default async function UserLayout({ children }: { children: ReactNode }) 
     } = await supabase.auth.getUser();
 
     if (!user) {
-        return redirect('/login');
+        return redirect('/sign-in');
     }
 
     return (<div className='flex w-screen'>
@@ -26,7 +26,7 @@ export default async function UserLayout({ children }: { children: ReactNode }) 
             </Suspense>
         </Nav>
 
-        <div className="min-h-screen w-full sm:pl-60 ">
+        <div className="min-h-screen w-full pt-10 sm:pl-60 ">
             {children}
         </div>
     </div>);

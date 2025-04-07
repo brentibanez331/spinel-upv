@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     } = await supabase.auth.getUser();
 
     if (!user) {
-        return redirect('/login');
+        return redirect('/sign-in');
     }
 
     return (
