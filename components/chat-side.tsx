@@ -5,7 +5,7 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { ChatMessageHistory } from "@/utils/types";
 import { Candidate } from "./model/models";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 interface ChatSideProps {
@@ -20,6 +20,36 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
     const [question, setQuestion] = useState<string>('')
     const [isGenerating, setIsGenerating] = useState<boolean>(false)
 
+    const [isStreaming, setIsStreaming] = useState<boolean>(false)
+    const [streamingIndex, setStreamingIndex] = useState<number>(0)
+    const [currentStreamingText, setCurrentStreamingText] = useState<string>('')
+    const [fullResponse, setFullResponse] = useState<string>('')
+
+    useEffect(() => {
+        if (isStreaming && streamingIndex < fullResponse.length) {
+            const typingSpeed = 0.5; // Much faster typing speed (5ms per character)
+            
+            const typingTimeout = setTimeout(() => {
+                // Update by chunks for faster appearance
+                const chunkSize = 3; // Process multiple characters at once
+                const newIndex = Math.min(streamingIndex + chunkSize, fullResponse.length);
+                
+                setStreamingIndex(newIndex);
+                
+                // Update the last message in chat history with current text
+                const updatedHistory = [...chatHistory];
+                if (updatedHistory.length > 0) {
+                    updatedHistory[updatedHistory.length - 1].message = fullResponse.substring(0, newIndex);
+                    setChatHistory(updatedHistory);
+                }
+            }, typingSpeed);
+            
+            return () => clearTimeout(typingTimeout);
+        } else if (isStreaming && streamingIndex >= fullResponse.length) {
+            setIsStreaming(false);
+        }
+    }, [isStreaming, streamingIndex, fullResponse, chatHistory]);
+
     const promptSearch = async (question: string) => {
         setSuggestions([])
         const updatedHistory = [...chatHistory, { role: 'user', message: question }];
@@ -32,7 +62,7 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
                 .replace('', `${candidate.display_name}'s`)
 
             const tagalogPronounExists = question.includes('kanyang') || question.includes('kaniyang') || question.includes('kaniya')
-            if(tagalogPronounExists){
+            if (tagalogPronounExists) {
                 const newQuestion = question.replace('kanyang', '').replace('kaniyang', '').replace('kanya', '').replace('?', '')
                 question = `${newQuestion} ni ${candidate.display_name}?`
             }
@@ -49,8 +79,14 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
 
             console.log(rawResponse.data)
 
-            setChatHistory([...updatedHistory, { role: 'AI', message: rawResponse.data.answer }])
-            setIsGenerating(false)
+            // Start with empty message and begin streaming
+            setFullResponse(rawResponse.data.answer);
+            setChatHistory([...updatedHistory, { role: 'AI', message: '' }]);
+            setIsGenerating(false);
+            setStreamingIndex(0);
+            setCurrentStreamingText('');
+            setIsStreaming(true);
+            setIsGenerating(false);
 
             setSuggestions(rawResponse.data.questions)
         }
@@ -101,9 +137,11 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
                                 )}
                             </div>
                         ))}
+
+
                         {isGenerating && (
                             <div className="flex space-x-1 text-sm animate-pulse bg-neutral-100 rounded-2xl py-2 px-3">
-                                 <p>Thinking</p><Ellipsis className="text-neutral-500"/>
+                                <p>Thinking</p><Ellipsis className="text-neutral-500" />
                             </div>
                         )}
                     </div>

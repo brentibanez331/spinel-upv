@@ -1,6 +1,6 @@
 export default function MyFavoritesPage(){
     return (
-        <div>
+        <div className="pt-10">
             Favorites
         </div>
     )
