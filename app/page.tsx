@@ -23,7 +23,7 @@ export default function Home() {
         <h1 style={{ fontSize: "10rem" }} className="text-white">
           BotWais
         </h1>
-        <p className="font-normal text-2xl text-white mt-8">
+        <p className="font-normal text-2xl text-white">
           Gabay mo sa bawat boto, tinig mo sa bawat desisyon
         </p>
 
@@ -33,7 +33,7 @@ export default function Home() {
             className="rounded-full px-8 font-semibold bg-[#ffa600] hover:bg-[#ff8c00] shadow-lg"
           >
             <Link href="/sign-up" className="text-[#0C40BB]">
-              Try BotWais now!
+              Subukan ngayon!
             </Link>
           </Button>
         </div>

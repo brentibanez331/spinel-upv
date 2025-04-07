@@ -7,7 +7,7 @@ export default function DynamicLogo() {
   const pathname = usePathname();
 
   const blackLogoPages = pathname === "/";
-  const logoSrc = blackLogoPages ? "/logo-white.png" : "/logo-black.png";
+  const logoSrc = blackLogoPages ? "/logo-white.png" : "/logo-gradient.png";
 
   return (
     <Image
