@@ -8,6 +8,7 @@ import { User } from "@supabase/supabase-js";
 import { fetchRequest } from "@/utils/database/fetch-request";
 import { useRouter } from "next/navigation";
 import { MoonLoader } from "react-spinners";
+import { Button } from "@/components/ui/button";
 export default function SwipeCardsPage() {
   const [user, setUser] = useState<User | null>(null);
   const supabase = createClient();
@@ -19,13 +20,15 @@ export default function SwipeCardsPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchUser = async () =>{
-      const { data: {user} } = await supabase.auth.getUser()
-      setUser(user)
-    } 
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
 
-    fetchUser()
-  }, [])
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const loadCandidates = async () => {
@@ -40,7 +43,6 @@ export default function SwipeCardsPage() {
 
     loadCandidates();
   }, []);
-
 
   // console.log("User:", user);
 
@@ -79,6 +81,10 @@ export default function SwipeCardsPage() {
     router.push("/liked-candidates/ballot");
   };
 
+  const favoriteCandidate = () => {
+    router.push("/my-favorites");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center pt-8 w-full h-screen">
       {isLoading ? (
@@ -86,8 +92,10 @@ export default function SwipeCardsPage() {
           <MoonLoader color="#000000" />
         </div>
       ) : (
-        <div className="">
-          <button onClick={swipeCardPage}>Ballot Mode</button>
+        <div className="flex flex-col items-center justify-center pt-12 w-full h-screen">
+          <Button className="" onClick={swipeCardPage}>
+            Ballot Mode
+          </Button>
           {user && filterLikedCandidates && filterLikedCandidates.length > 0 ? (
             <SwipeCards
               candidates={filterLikedCandidates.map((candidate) => ({
@@ -101,6 +109,9 @@ export default function SwipeCardsPage() {
           ) : (
             <div>No candidates available.</div>
           )}
+          <Button className="" onClick={favoriteCandidate}>
+            Favorite Candidates
+          </Button>
         </div>
       )}
     </div>

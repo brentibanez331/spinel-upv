@@ -47,7 +47,7 @@ export const SwipeCard = ({
   useMotionValueEvent(x, "change", (latest) => console.log(latest));
 
   const handleDragEnd = (id: string) => {
-    if (Math.abs(x.get()) > 10) {
+    if (Math.abs(x.get()) > 100) {
       setCards((pv) => pv.filter((prev) => prev.id !== id));
     }
     if (x.get() > 0) {
@@ -110,10 +110,10 @@ export const SwipeCard = ({
 
         <motion.div className="absolute bottom-0 left-0 w-full h-full rounded-b-xl" />
 
-        <p className="absolute bg-black p-2  bottom-12 left-4 text-sm text-white">
+        <p className="absolute rounded-br-lg rounded-t-lg bg-black p-1 font-bold bottom-12 left-4 text-sm text-white">
           {displayName}
         </p>
-        <p className="absolute bottom-8 left-4 text-xs text-white">
+        <p className="absolute rounded-b-lg rounded-tr-lg rounded- bg-black p-1 bottom-8 left-4 text-xs text-white">
           {politicalParty}
         </p>
       </motion.div>
@@ -125,7 +125,7 @@ const SwipeCards = ({ candidates }: { candidates: Card[] }) => {
   const [cards, setCards] = useState<Card[]>(candidates);
   const [likedCandidates, setLikedCandidates] = useState<string[]>([]);
   return (
-    <div className="min-h-screen grid place-items-center">
+    <div className="h-1/2 w-1/2 grid place-items-center">
       {cards.length > 0 ? (
         cards.map((card) => (
           <SwipeCard
@@ -147,3 +147,4 @@ const SwipeCards = ({ candidates }: { candidates: Card[] }) => {
 };
 
 export default SwipeCards;
+``;
