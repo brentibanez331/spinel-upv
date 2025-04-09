@@ -1,7 +1,5 @@
 "use client";
 
-import SwipeCards from "@/components/swipe-cards";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createClient } from "@/utils/supabase/client";
 import { useState, useEffect } from "react";
 import { Candidate } from "@/components/model/models";
