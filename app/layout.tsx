@@ -5,7 +5,8 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import Image from "next/image";
-
+import DynamicLogo from "@/components/dynamic-logo";
+import DynamicNavbar from "@/components/dynamic-navbar";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -38,19 +39,14 @@ export default async function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
             <div className="w-full h-screen flex flex-col items-center">
-              <nav className="w-full bg-white fixed left-0 z-[999] items-center flex justify-center h-16">
-                <div className="w-full flex justify-between items-center py-6 px-8 text-sm flex-wrap">
+              <nav className="w-full fixed left-0 z-[999] items-center flex justify-center h-16">
+                <DynamicNavbar>
                   <div className=" flex gap-5 items-center font-semibold">
-                    <Image
-                          src={"/logo-gradient.png"}
-                          alt="Logo"
-                          width={1000}
-                          height={1000}
-                          className="z-10 h-[30px] sm:h-[35px] w-auto object-contain"
-                        />
+                    <DynamicLogo />
                   </div>
+
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
-                </div>
+                </DynamicNavbar>
               </nav>
 
               <div className="flex items-center justify-center w-full h-screen">
