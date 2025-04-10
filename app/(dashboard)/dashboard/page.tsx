@@ -13,6 +13,7 @@ import { Search } from "lucide-react";
 import Loader from "@/components/loader/loader";
 
 export default function UserDashboard() {
+    const [isFetching, setIsFetching] = useState<boolean>(true)
     const [candidates, setCandidates] = useState<Candidate[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -25,12 +26,14 @@ export default function UserDashboard() {
     // Load candidates on component mount
     useEffect(() => {
         const loadCandidates = async () => {
+            setIsFetching(true)
             try {
                 const { Candidate, error } = await fetchRequest("candidates");
                 if (error) {
                     setError("Failed to load candidates");
                 } else {
                     setCandidates(Candidate);
+                    setIsFetching(false)
                 }
             } catch (err) {
                 setError("An error occurred while fetching candidates");
@@ -48,9 +51,9 @@ export default function UserDashboard() {
         if (selectedCandidate) {
             const gender = selectedCandidate.personal_info?.[0]?.sex === 'M' ? 'his' : 'her';
 
-            setChatHistory([{ 
-                role: 'AI', 
-                message: `Nakita ko na interesado ka na malaman patungkol kay ${selectedCandidate.display_name}. Ano ang gusto mong malaman?` 
+            setChatHistory([{
+                role: 'AI',
+                message: `Nakita ko na interesado ka na malaman patungkol kay ${selectedCandidate.display_name}. Ano ang gusto mong malaman?`
             }]);
 
             setSuggestions([
@@ -66,28 +69,28 @@ export default function UserDashboard() {
         if (!candidates || candidates.length === 0) {
             return [];
         }
-        
+
         if (!searchQuery || searchQuery.trim() === "") {
             return candidates;
         }
-        
+
         const query = searchQuery.toLowerCase().trim();
-        
+
         return candidates.filter(candidate => {
             // Search through multiple candidate fields
             return (
                 // Name search
                 candidate.display_name?.toLowerCase().includes(query) ||
-                
+
                 // Party search
                 candidate.political_party?.toLowerCase().includes(query) ||
-                
+
                 // Position search (if available)
                 (candidate.candidacy[0].position_sought && candidate.candidacy[0].position_sought.toLowerCase().includes(query))
-                
+
                 // // Location search (if available)
                 // (candidate.location && candidate.location.toLowerCase().includes(query)) ||
-                
+
                 // // Bio search (if available)
                 // (candidate.bio && candidate.bio.toLowerCase().includes(query))
             );
@@ -126,27 +129,34 @@ export default function UserDashboard() {
                         className="w-[300px] rounded-xl pl-10"
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        placeholder="Search by name, party, or position..." 
+                        placeholder="Search by name, party, or position..."
                     />
-                    <Search className="absolute top-2.5 left-2 text-neutral-300" size={20}/>
+                    <Search className="absolute top-2.5 left-2 text-neutral-300" size={20} />
                 </div>
-                
+
                 <div className="flex w-full gap-4 flex-col">
-                    {filteredCandidates && filteredCandidates.length > 0 ? (
-                        filteredCandidates.map((candidate) => (
-                            <CandidateCard
-                                key={candidate.id}
-                                candidate={candidate}
-                                selectedCandidate={selectedCandidate}
-                                setSelectedCandidate={setSelectedCandidate}
-                            />
-                        ))
+                    {!isFetching ? (
+
+                        filteredCandidates.length > 0 ? (
+                            filteredCandidates.map((candidate) => (
+                                <CandidateCard
+                                    key={candidate.id}
+                                    candidate={candidate}
+                                    selectedCandidate={selectedCandidate}
+                                    setSelectedCandidate={setSelectedCandidate}
+                                />
+                            ))
+                        ) : (
+                            <p>No Candidates found</p>
+                        )
+
+
                     ) : (
                         <Loader />
                     )}
                 </div>
             </div>
-            
+
             <ChatSide
                 candidate={selectedCandidate}
                 suggestions={suggestions}

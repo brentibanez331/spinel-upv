@@ -43,12 +43,12 @@ export default function Nav({ children, params }: { children: ReactNode, params:
                 icon: <Heart width={18} />
             },
             
-            {
-                name: 'My Profile',
-                href: '/profile',
-                isActive: segments[0] === "profile",
-                icon: <User width={18} />
-            }
+            // {
+            //     name: 'My Profile',
+            //     href: '/profile',
+            //     isActive: segments[0] === "profile",
+            //     icon: <User width={18} />
+            // }
         ]
     }, [segments, id])
 
@@ -89,11 +89,6 @@ export default function Nav({ children, params }: { children: ReactNode, params:
                         ))}
                     </div>
                 </div>
-                <form action={signOutAction}>
-                    <Button type="submit" variant={"outline"}>
-                        Sign out
-                    </Button>
-                </form>
             </div>
         </>
     )

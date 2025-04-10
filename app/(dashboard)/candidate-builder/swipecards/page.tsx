@@ -4,16 +4,32 @@ import SwipeCards from "@/components/swipe-cards";
 import { createClient } from "@/utils/supabase/client";
 import { useState, useEffect } from "react";
 import { Candidate } from "@/components/model/models";
+import { User } from "@supabase/supabase-js";
 import { fetchRequest } from "@/utils/database/fetch-request";
 import { useRouter } from "next/navigation";
 import { MoonLoader } from "react-spinners";
+import { Button } from "@/components/ui/button";
+import { ShowLikedCandidates } from "@/components/show-liked-candidates";
 export default function SwipeCardsPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const supabase = createClient();
+
   const [likedCandidates, setLikedCandidates] = useState<string[]>([]);
   const [candidates, setCandidates] = useState<Candidate[] | null>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const loadCandidates = async () => {
@@ -27,20 +43,6 @@ export default function SwipeCardsPage() {
     };
 
     loadCandidates();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const supabase = await createClient();
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error("ERROR!", error.message);
-      }
-      setUser(data.user);
-      console.log("User Data:", data.user);
-    };
-
-    fetchData();
   }, []);
 
   // console.log("User:", user);
@@ -80,28 +82,45 @@ export default function SwipeCardsPage() {
     router.push("/liked-candidates/ballot");
   };
 
+  const favoriteCandidate = () => {
+    router.push("/my-favorites");
+  };
+
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center pt-8 w-full h-screen">
       {isLoading ? (
         <div className="flex items-center justify-center h-screen">
           <MoonLoader color="#000000" />
         </div>
       ) : (
-        <div>
-          <button onClick={swipeCardPage}>Ballot Mode</button>
-          {filterLikedCandidates && filterLikedCandidates.length > 0 ? (
-            <SwipeCards
-              candidates={filterLikedCandidates.map((candidate) => ({
-                id: candidate.id,
-                userId: user.id,
-                imgUrl: candidate.image_url || "N/A",
-                displayName: candidate.display_name,
-                politicalParty: candidate.political_party || "N/A",
-              }))}
-            />
-          ) : (
-            <div>No candidates available.</div>
-          )}
+        <div className="flex flex-col items-center justify-center pt-12 w-full h-screen">
+          <Button className="" onClick={swipeCardPage}>
+            Ballot Mode
+          </Button>
+          <div className="flex h-screen flex-row">
+            {" "}
+            <div>
+              {user &&
+              filterLikedCandidates &&
+              filterLikedCandidates.length > 0 ? (
+                <SwipeCards
+                  candidates={filterLikedCandidates.map((candidate) => ({
+                    id: candidate.id,
+                    userId: user.id,
+                    imgUrl: candidate.image_url || "N/A",
+                    displayName: candidate.display_name,
+                    politicalParty: candidate.political_party || "N/A",
+                  }))}
+                />
+              ) : (
+                <div>No candidates available.</div>
+              )}
+            </div>
+            <div>Hello</div>
+          </div>
+          <Button className="" onClick={favoriteCandidate}>
+            Favorite Candidates
+          </Button>
         </div>
       )}
     </div>
