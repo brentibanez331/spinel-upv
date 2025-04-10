@@ -47,6 +47,7 @@ const CandidateInfo = () => {
     const [summary, setSummary] = useState<string>('')
     const [summaryUrls, setSummaryUrls] = useState<{ title: string, url: string }[]>([])
     const [isTagalog, setIsTagalog] = useState<boolean>(false)
+    const [isScoreLoading, setIsScoreLoading] = useState<boolean>(true)
 
     const [suggestions, setSuggestions] = useState<string[]>([])
     const [chatHistory, setChatHistory] = useState<ChatMessageHistory[]>([])
@@ -113,6 +114,8 @@ const CandidateInfo = () => {
             setExperienceUrls(rawResponse.data.experienceUrls)
             setEducationUrls(rawResponse.data.educationUrls)
             setPlatformUrls(rawResponse.data.platformUrls)
+
+            setIsScoreLoading(false)
         }
 
 
@@ -307,7 +310,7 @@ const CandidateInfo = () => {
                                 <div className="flex flex-col space-y-2 items-center">
                                     <CircularProgressbar
                                         value={educationLevel}
-                                        text={educationLevel > 0 ? `${educationLevel}%` : ''}
+                                        text={!isScoreLoading ? `${educationLevel}%` : ''}
                                         styles={{
                                             root: { width: 100, height: 100 },
                                             path: {
@@ -350,7 +353,7 @@ const CandidateInfo = () => {
                                 <div className="flex flex-col space-y-2 items-center">
                                     <CircularProgressbar
                                         value={experienceLevel}
-                                        text={experienceLevel > 0 ? `${experienceLevel}%` : ''}
+                                        text={!isScoreLoading ? `${experienceLevel}%` : ''}
                                         styles={{
                                             root: { width: 100, height: 100 },
                                             path: {
@@ -386,7 +389,7 @@ const CandidateInfo = () => {
                                 <div className="flex flex-col space-y-2 items-center">
                                     <CircularProgressbar
                                         value={advocacyLevel}
-                                        text={advocacyLevel > 0 ? `${advocacyLevel}%` : ''}
+                                        text={!isScoreLoading ? `${advocacyLevel}%` : ''}
                                         styles={{
                                             root: { width: 100, height: 100 },
                                             path: {

@@ -17,8 +17,7 @@ export const fetchRequest = async (
       credentials (*)
     `);
 
-  // console.log(candidates)
-  console.log("Candidate:", JSON.stringify(candidates, null, 2));
+  // console.log(candidates
 
   if (error) {
     console.log(error);

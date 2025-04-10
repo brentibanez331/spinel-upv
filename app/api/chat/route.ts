@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+    
     const currentQuestion = messages[messages.length - 1].content;
     if (!currentQuestion?.trim()) {
       return NextResponse.json(

@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const name = body.input;  //only holds the name
 
     const experienceResults = await searchTool.invoke(`Job experience of ${name}`)
-    const educationResults = await searchTool.invoke(`Education of ${name}`)
+    const educationResults = await searchTool.invoke(`Educational background of ${name}`)
     const platformResults = await searchTool.invoke(`Platform and Advocacy of ${name}`)
 
     const experienceData: ExtractedSearch[] = JSON.parse(experienceResults)
@@ -48,16 +48,16 @@ export async function POST(req: NextRequest) {
 You are evaluating a senatorial candidate from the Philippines based on three core criteria: Education, Career Experience, and Platform & Advocacy.
 
 Please rate the candidate on a scale from 0 to 100 for each category based on how they compare to an ideal Filipino senator.
-Include a one to two sentences of reasoning for the scores for each category. Start your reasonings with the name of the candidate.
+Include a one to two sentences reasoning for the scores for each category. Start your reasonings with the name of the candidate.
 Avoid mentioning the criteria and score or range within the reasoning.
 
 Use the following detailed scoring guidelines:
 
 1. **Education** 
-   - Excellent (90-100%): Graduate of a top-tier university (UP, Ateneo, La Salle, international equivalent) with postgraduate degrees in law, public policy, economics, or political science.
-   - Good (80-89%): Bachelor's degree from a reputable university in a relevant field with some continuing education or specialized training.
-   - Average (60-79%): Bachelor's degree from a lesser-known institution or in a field not directly related to governance.
-   - Below Average (40-59%): Incomplete tertiary education or education in fields with minimal relevance to public service.
+   - Excellent (90-100%): Law degree (J.D., LL.B., etc.) from a top-tier university (UP, Ateneo, La Salle, international equivalent) or graduate/postgraduate degrees in law, public policy, economics, or political science. The presence of a legal education should be heavily weighted in this criterion.
+   - Good (80-89%): Bachelor's degree from a reputable university in a relevant field (especially public administration, political science, etc.) with some continuing education or specialized training in law-related courses.
+   - Average (60-79%): Bachelor's degree from a lesser-known institution or in a field not directly related to governance or law.
+   - Below Average (40-59%): Incomplete tertiary education or education in fields with minimal relevance to public service or legal frameworks.
    - Poor (0-39%): Limited formal education or insufficient information about educational background.
 
 2. **Career / Experience** 

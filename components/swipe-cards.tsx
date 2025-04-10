@@ -52,15 +52,15 @@ export const SwipeCard = ({
   const disLikedOpacity = useTransform(x, [0, -100], [0, 1]);
   const rotate = useTransform(x, [-150, 150], [-20, 20]);
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: any, info: any) => {
+    const velocity = info.velocity.x;
+
     if (Math.abs(x.get()) > 100) {
       const direction = x.get() > 0 ? 'right' : 'left';
-      setTimeout(() => {
-        onSwipe(direction, id);
-      }, 300);
+      onSwipe(direction, id);
       // onSwipe(direction, id); // Call onSwipe callback
     } else {
-      animate(x, 0, { type: "spring", damping: 15 }); // Return to center
+      animate(x, 0, { type: "spring", damping: 15, velocity: velocity }); // Return to center
     }
   };
 
@@ -155,7 +155,7 @@ export const SwipeCard = ({
           style={{ x, opacity, rotate }}
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
-          onDragEnd={() => handleDragEnd(id)}
+          onDragEnd={handleDragEnd}
           className="relative w-[300px] h-[400px]"
         >
           <motion.img

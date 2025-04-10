@@ -15,7 +15,7 @@ export default function SwipeCardsPage() {
   const [user, setUser] = useState<User | null>(null);
   const supabase = createClient();
 
-  const [likedCandidates, setLikedCandidates] = useState<string[]>([]);
+  const [likedCandidates, setLikedCandidates] = useState<Candidate[]>([]);
   const [candidates, setCandidates] = useState<Candidate[] | null>(null);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +31,7 @@ export default function SwipeCardsPage() {
     }
 
     fetchUser()
+
   }, [])
 
   useEffect(() => {
@@ -47,35 +48,25 @@ export default function SwipeCardsPage() {
     loadCandidates();
   }, []);
 
+  const fetchedLikedCandidates = async (id: string) => {
+    const { data, error } = await supabase.from("ballot").select("*, candidates (*)").eq("user_id", id).eq("status", "saved")
+
+    if (data) {
+      const likedCandidates = data.map((data) => data.candidates)
+      console.log(likedCandidates)
+    }
+
+
+    return data
+  }
 
   useEffect(() => {
-    const loadUserLikedCandidates = async () => {
-      if (user) {
-        const supabase = createClient();
-        const { data, error } = await supabase
-          .from("ballot")
-          .select("*")
-          .eq("user_id", user.id);
+    if (user) {
+      fetchedLikedCandidates(user.id)
+    }
 
-        if (error) {
-          console.error("ERROR LIKED DETAILS:", error);
-          setError("Failed to load liked candidates");
-        } else {
-          console.log("USER FOUND!", user);
-          setLikedCandidates(data.map((item) => item.candidate_id));
-          console.log("USER LIKED CANDIDATES", data);
-        }
+  }, [user])
 
-
-        if (data?.length === 0) {
-          console.log("NO LIKED CANDIDATES");
-        }
-      } else {
-        console.log("No user found");
-      }
-    };
-    loadUserLikedCandidates();
-  }, [user]);
 
   const filterLikedCandidates = useMemo(() => {
     return candidates?.filter(
@@ -101,37 +92,48 @@ export default function SwipeCardsPage() {
   }, [filterLikedCandidates, likedCandidates]);
 
   return (
-    <div className="flex flex-col items-center w-full h-screen">
-      {isLoading ? (
-        <div className="flex items-center justify-center h-screen">
-          <MoonLoader color="#000000" />
-        </div>
-      ) : (
-        <div className="w-full pt-10 px-4 flex sm:pr-96">
+    <div className="flex flex-col items-center w-full">
+      <div className="w-full pt-10 px-4 flex">
+        <div>
           <div>
-            <div>
-              <p className="text-xl font-bold">Candidate Builder</p>
-              <p className="text-sm text-neutral-600">I-buo ang iyong lista ng kandidato</p>
-            </div>
-            {user && filterLikedCandidates && filterLikedCandidates.length > 0 ? (
-              <SwipeCards
+            <p className="text-xl font-bold">Candidate Builder</p>
+            <p className="text-sm text-neutral-600">I-buo ang iyong lista ng kandidato</p>
+          </div>
+          {user && filterLikedCandidates && filterLikedCandidates.length > 0 ? (
+            <SwipeCards
 
-                candidates={filterLikedCandidates.map((candidate) => ({
-                  id: candidate.id,
-                  userId: user.id,
-                  imgUrl: candidate.image_url || "N/A",
-                  displayName: candidate.display_name,
-                  politicalParty: candidate.political_party || "N/A",
-                }))}
-              />
+              candidates={filterLikedCandidates.map((candidate) => ({
+                id: candidate.id,
+                userId: user.id,
+                imgUrl: candidate.image_url || "N/A",
+                displayName: candidate.display_name,
+                politicalParty: candidate.political_party || "N/A",
+              }))}
+            />
+          ) : (
+            <div>No candidates available.</div>
+          )}
+        </div>
+        <div className="ml-96 border border-neutral-200 p-4 w-[500px] h-auto shadow-md rounded-md">
+          <p className="text-lg font-bold">Saved Candidates</p>
+          <div>
+            {likedCandidates.length > 0 ? (
+
+              likedCandidates.map((candidate) => (
+                <div className="border buto border-neutral-400">
+                  {candidate.display_name}
+                </div>
+              ))
+
+
             ) : (
-              <div>No candidates available.</div>
+              <div></div>
             )}
           </div>
-          {/* <ChatSide candidate={filterLikedCandidates![0]} chatHistory={chatHistory} setChatHistory={setChatHistory} setSuggestions={setSuggestions} suggestions={suggestions} /> */}
-
         </div>
-      )}
+        {/* <ChatSide candidate={filterLikedCandidates![0]} chatHistory={chatHistory} setChatHistory={setChatHistory} setSuggestions={setSuggestions} suggestions={suggestions} /> */}
+
+      </div>
     </div>
   );
 }
