@@ -7,6 +7,7 @@ import { fetchRequest } from "@/utils/database/fetch-request";
 import BallotTable from "@/components/ui/ballot";
 import { useRouter } from "next/navigation";
 import { MoonLoader } from "react-spinners";
+import { Button } from "@/components/ui/button";
 
 export default function BallotPage() {
   const [user, setUser] = useState<any>(null);
@@ -73,8 +74,7 @@ export default function BallotPage() {
       }
     };
     loadUserLikedCandidates();
-    setLoading(false);
-  }, []);
+  }, [user]);
 
   console.log("Liked Candidates:", likedCandidates);
 
@@ -85,6 +85,9 @@ export default function BallotPage() {
   const swipeCardPage = () => {
     router.push("/liked-candidates/swipecards");
   };
+  const favoriteCandidate = () => {
+    router.push("/my-favorites");
+  };
 
   return (
     <div>
@@ -93,8 +96,15 @@ export default function BallotPage() {
           <MoonLoader color="#000000" />
         </div>
       ) : (
-        <div>
-          <button onClick={swipeCardPage}>Swipe Card Mode</button>
+        <div className="flex flex-col items-start justify-start pt-12 w-full h-screen">
+          <div className="flex px-4 gap-4">
+            <Button className="" onClick={swipeCardPage}>
+              Swipe Card Mode
+            </Button>
+            <Button className="" onClick={favoriteCandidate}>
+              Favorite Candidates
+            </Button>
+          </div>
           <BallotTable
             candidates={(filterLikedCandidates || []).map((candidate) => ({
               id: candidate.id,

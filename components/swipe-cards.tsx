@@ -269,3 +269,4 @@ const SwipeCards = ({ candidates }: { candidates: Card[] }) => {
 };
 
 export default SwipeCards;
+``;
