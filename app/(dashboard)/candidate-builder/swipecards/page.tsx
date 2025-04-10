@@ -9,6 +9,7 @@ import { fetchRequest } from "@/utils/database/fetch-request";
 import { useRouter } from "next/navigation";
 import { MoonLoader } from "react-spinners";
 import { Button } from "@/components/ui/button";
+import { ShowLikedCandidates } from "@/components/show-liked-candidates";
 export default function SwipeCardsPage() {
   const [user, setUser] = useState<User | null>(null);
   const supabase = createClient();
@@ -96,19 +97,27 @@ export default function SwipeCardsPage() {
           <Button className="" onClick={swipeCardPage}>
             Ballot Mode
           </Button>
-          {user && filterLikedCandidates && filterLikedCandidates.length > 0 ? (
-            <SwipeCards
-              candidates={filterLikedCandidates.map((candidate) => ({
-                id: candidate.id,
-                userId: user.id,
-                imgUrl: candidate.image_url || "N/A",
-                displayName: candidate.display_name,
-                politicalParty: candidate.political_party || "N/A",
-              }))}
-            />
-          ) : (
-            <div>No candidates available.</div>
-          )}
+          <div className="flex h-screen flex-row">
+            {" "}
+            <div>
+              {user &&
+              filterLikedCandidates &&
+              filterLikedCandidates.length > 0 ? (
+                <SwipeCards
+                  candidates={filterLikedCandidates.map((candidate) => ({
+                    id: candidate.id,
+                    userId: user.id,
+                    imgUrl: candidate.image_url || "N/A",
+                    displayName: candidate.display_name,
+                    politicalParty: candidate.political_party || "N/A",
+                  }))}
+                />
+              ) : (
+                <div>No candidates available.</div>
+              )}
+            </div>
+            <div>Hello</div>
+          </div>
           <Button className="" onClick={favoriteCandidate}>
             Favorite Candidates
           </Button>
