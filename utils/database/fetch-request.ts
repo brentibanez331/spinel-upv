@@ -47,3 +47,7 @@ export const fetchRequest = async (
 
   return { Candidate: candidatesWithImages, error: null };
 };
+
+
+
+

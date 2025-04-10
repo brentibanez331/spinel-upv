@@ -8,6 +8,7 @@ import { User } from "@supabase/supabase-js";
 import { fetchRequest } from "@/utils/database/fetch-request";
 import { useRouter } from "next/navigation";
 import { MoonLoader } from "react-spinners";
+
 export default function SwipeCardsPage() {
   const [user, setUser] = useState<User | null>(null);
   const supabase = createClient();

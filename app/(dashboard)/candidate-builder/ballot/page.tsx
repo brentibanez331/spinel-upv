@@ -62,9 +62,12 @@ export default function BallotPage() {
           setLikedCandidates(data.map((item) => item.candidate_id));
           console.log("USER LIKED CANDIDATES", data);
         }
+
+
         if (data?.length === 0) {
           console.log("NO LIKED CANDIDATES");
         }
+        
       } else {
         console.log("No user found");
       }

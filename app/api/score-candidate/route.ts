@@ -32,6 +32,8 @@ export async function POST(req: NextRequest) {
 You are evaluating a senatorial candidate from the Philippines based on three core criteria: Education, Career Experience, and Platform & Advocacy.
 
 Please rate the candidate on a scale from 0 to 100 for each category based on how they compare to an ideal Filipino senator.
+Include a one to two sentences of reasoning for the scores for each category. Do not include the name of the candidate in the reasoning. 
+Avoid mentioning the criteria within the reasoning.
 
 Use the following baselines for scoring:
 
@@ -65,6 +67,8 @@ ${JSON.stringify(platformResults)}
 `
 
     const result = await structuredLLM.invoke(enhancedPrompt)
+
+    console.log(result)
 
     return NextResponse.json({
         data: {

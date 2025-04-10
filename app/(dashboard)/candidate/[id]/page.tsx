@@ -21,6 +21,7 @@ interface DetailItem {
     icon: JSX.Element;
     value: string | number | undefined;
 }
+
 const CandidateInfo = () => {
     const params = useParams();
     const candidateId = params.id;
@@ -99,6 +100,8 @@ const CandidateInfo = () => {
             generateScores()
         }
     }, [candidate])
+
+    
 
 
     const detailsMap: DetailItem[] = [
