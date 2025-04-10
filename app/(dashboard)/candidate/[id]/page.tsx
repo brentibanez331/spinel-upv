@@ -6,7 +6,7 @@ import { fetchRequest } from "@/utils/database/fetch-request";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { JSX } from "react/jsx-runtime";
-import { BriefcaseBusiness, IdCard, Landmark, Languages, RefreshCw, ScrollText, Sparkles } from "lucide-react";
+import { BriefcaseBusiness, IdCard, Landmark, Languages, LinkIcon, RefreshCw, ScrollText, Sparkles } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -14,13 +14,28 @@ import { Skeleton } from "@/components/ui/skeleton"
 import ChatSide from "@/components/chat-side";
 import { ChatMessageHistory } from "@/utils/types";
 import { motion } from "framer-motion";
-import { CircularProgressbar } from "react-circular-progressbar";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import 'react-circular-progressbar/dist/styles.css';
+
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import Link from "next/link";
 
 interface DetailItem {
     icon: JSX.Element;
     value: string | number | undefined;
 }
+
+const getColorForValue = (value: number) => {
+    if (value < 40) return "#FF4136";
+    if (value < 70) return "#E6B800";
+    return "#2ECC40";
+};
 
 const CandidateInfo = () => {
     const params = useParams();
@@ -30,6 +45,7 @@ const CandidateInfo = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [summary, setSummary] = useState<string>('')
+    const [summaryUrls, setSummaryUrls] = useState<{ title: string, url: string }[]>([])
     const [isTagalog, setIsTagalog] = useState<boolean>(false)
 
     const [suggestions, setSuggestions] = useState<string[]>([])
@@ -39,6 +55,14 @@ const CandidateInfo = () => {
     const [educationLevel, setEducationLevel] = useState<number>(0)
     const [advocacyLevel, setAdvocacyLevel] = useState<number>(0)
 
+    const [experienceUrls, setExperienceUrls] = useState<{ title: string, url: string }[]>([])
+    const [experienceReason, setExperienceReason] = useState<string>('')
+
+    const [educationUrls, setEducationUrls] = useState<{ title: string, url: string }[]>([])
+    const [educationReason, setEducationReason] = useState<string>('')
+
+    const [platformUrls, setPlatformUrls] = useState<{ title: string, url: string }[]>([])
+    const [platformReason, setPlatformReason] = useState<string>('')
 
     const generateSummary = async () => {
         if (candidate) {
@@ -55,7 +79,10 @@ const CandidateInfo = () => {
             )
 
             const rawResponse = await response.json()
-            setSummary(rawResponse.data)
+            console.log(rawResponse.data)
+            setSummary(rawResponse.data.summary)
+            setSummaryUrls(rawResponse.data.sources)
+            console.log("SOURCES: ", rawResponse.data.sources)
         }
     }
 
@@ -73,11 +100,19 @@ const CandidateInfo = () => {
 
             const rawResponse = await response.json()
             console.log("Candidate score: ", rawResponse)
+            console.log(rawResponse.data.educationReasoning)
 
             setExperienceLevel(rawResponse.data.experience)
             setEducationLevel(rawResponse.data.education)
             setAdvocacyLevel(rawResponse.data.platform)
 
+            setExperienceReason(rawResponse.data.experienceReasoning)
+            setEducationReason(rawResponse.data.educationReasoning)
+            setPlatformReason(rawResponse.data.platformReasoning)
+
+            setExperienceUrls(rawResponse.data.experienceUrls)
+            setEducationUrls(rawResponse.data.educationUrls)
+            setPlatformUrls(rawResponse.data.platformUrls)
         }
 
 
@@ -101,7 +136,7 @@ const CandidateInfo = () => {
         }
     }, [candidate])
 
-    
+
 
 
     const detailsMap: DetailItem[] = [
@@ -121,7 +156,7 @@ const CandidateInfo = () => {
     ]
 
     useEffect(() => {
-        console.log("credentials:", candidate?.credentials[0]?.education)
+
         // console.log(params)
         // console.log(candidateId)
         const loadCandidate = async () => {
@@ -197,12 +232,41 @@ const CandidateInfo = () => {
 
                                 </div>
                             </div>
-                            <Button size={"icon"} variant={"secondary"}>
-                                <Languages className={`${isTagalog ? 'text-neutral-800' : 'text-neutral-400'} hover:text-neutral-800 transition`} />
-                            </Button>
+                            <div className="space-x-2">
+                                <Dialog>
+                                    <DialogTrigger>
+                                        <div className="space-x-2 flex text-sm items-center">
+                                            <p>
+                                                View Sources
+                                            </p>
+                                            <LinkIcon className='' size={16}/>
+                                        </div>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>Sources</DialogTitle>
+                                        </DialogHeader>
+
+                                        {summaryUrls.map((url, index) => (
+                                            <Link key={index} className="hover:bg-neutral-100 transition border p-4 rounded-lg shadow-md group" href={url.url} target="_blank">
+                                                <p>{url.title}</p>
+                                                <p className="text-sm group-hover:underline text-neutral-600">{url.url}</p>
+                                            </Link>
+                                        ))}
+
+                                    </DialogContent>
+                                </Dialog>
+
+                                {/* <Button size={"icon"} variant={"secondary"}>
+                                    <Languages className={`${isTagalog ? 'text-neutral-800' : 'text-neutral-400'} hover:text-neutral-800 transition`} />
+                                </Button> */}
+                            </div>
+
                         </div>
                         {summary ?
-                            (<p>{summary}</p>) :
+                            (
+                                <p>{summary}</p>
+                            ) :
                             (<div className="flex flex-col space-y-2">
                                 <motion.div
                                     className="h-4 w-full bg-neutral-200 rounded-md"
@@ -238,18 +302,121 @@ const CandidateInfo = () => {
                         </div>
                     </div> */}
                     <div className="flex w-full justify-evenly py-10">
-                        <div className="flex flex-col space-y-2 items-center">
-                            <CircularProgressbar value={educationLevel} text={`${educationLevel}%`} styles={{ root: { width: 100, height: 100 } }} />
-                            <p>Education</p>
-                        </div>
-                        <div className="flex flex-col space-y-2 items-center">
-                            <CircularProgressbar value={experienceLevel} text={`${experienceLevel}%`} styles={{ root: { width: 100, height: 100 } }} />
-                            <p>Experience</p>
-                        </div>
-                        <div className="flex flex-col space-y-2 items-center">
-                            <CircularProgressbar value={advocacyLevel} text={`${advocacyLevel}%`} styles={{ root: { width: 100, height: 100 } }} />
-                            <p>Platform and Advocacy</p>
-                        </div>
+                        <HoverCard>
+                            <HoverCardTrigger>
+                                <div className="flex flex-col space-y-2 items-center">
+                                    <CircularProgressbar
+                                        value={educationLevel}
+                                        text={educationLevel > 0 ? `${educationLevel}%` : ''}
+                                        styles={{
+                                            root: { width: 100, height: 100 },
+                                            path: {
+                                                stroke: getColorForValue(educationLevel)
+                                            },
+                                            text: {
+                                                fill: getColorForValue(educationLevel)
+                                            }
+                                        }}
+                                    // styles={buildStyles({
+                                    //     pathColor: getColorForValue(educationLevel),
+                                    //     textColor: getColorForValue(educationLevel),
+                                    //     trailColor: "#d6d6d6",
+                                    // })}
+                                    />
+                                    <p className="font-bold">Education</p>
+                                </div>
+                            </HoverCardTrigger>
+                            <HoverCardContent className="">
+                                <div>
+                                    <p className="text-sm">
+                                        {educationReason}
+                                    </p>
+                                    <Separator className="my-2" />
+                                    <div className="flex flex-col text-xs space-y-1">
+                                        {educationUrls.map((url, index) => (
+
+                                            <a key={index} target="_blank" href={url.url} className="hover:underline">
+                                                ↗ {url.title}
+                                            </a>
+                                        ))}
+
+                                    </div>
+                                </div>
+                            </HoverCardContent>
+                        </HoverCard>
+
+                        <HoverCard>
+                            <HoverCardTrigger>
+                                <div className="flex flex-col space-y-2 items-center">
+                                    <CircularProgressbar
+                                        value={experienceLevel}
+                                        text={experienceLevel > 0 ? `${experienceLevel}%` : ''}
+                                        styles={{
+                                            root: { width: 100, height: 100 },
+                                            path: {
+                                                stroke: getColorForValue(experienceLevel)
+                                            },
+                                            text: {
+                                                fill: getColorForValue(experienceLevel)
+                                            }
+                                        }} />
+                                    <p className="font-bold">Experience</p>
+                                </div>
+                            </HoverCardTrigger>
+                            <HoverCardContent>
+                                <div>
+                                    <p className="text-sm">
+                                        {experienceReason}
+                                    </p>
+                                    <Separator className="my-2" />
+                                    <div className="flex flex-col text-xs space-y-1">
+                                        {experienceUrls.map((url, index) => (
+
+                                            <a key={index} target="_blank" href={url.url} className="hover:underline">
+                                                ↗ {url.title}
+                                            </a>
+                                        ))}
+
+                                    </div>
+                                </div>
+                            </HoverCardContent>
+                        </HoverCard>
+                        <HoverCard>
+                            <HoverCardTrigger>
+                                <div className="flex flex-col space-y-2 items-center">
+                                    <CircularProgressbar
+                                        value={advocacyLevel}
+                                        text={advocacyLevel > 0 ? `${advocacyLevel}%` : ''}
+                                        styles={{
+                                            root: { width: 100, height: 100 },
+                                            path: {
+                                                stroke: getColorForValue(advocacyLevel)
+                                            },
+                                            text: {
+                                                fill: getColorForValue(advocacyLevel)
+                                            }
+                                        }} />
+                                    <p className="font-bold">Platform and Advocacy</p>
+                                </div>
+                            </HoverCardTrigger>
+                            <HoverCardContent>
+                                <div>
+                                    <p className="text-sm">
+                                        {platformReason}
+                                    </p>
+                                    <Separator className="my-2" />
+                                    <div className="flex flex-col text-xs space-y-1">
+                                        {platformUrls.map((url, index) => (
+                                            <a key={index} target="_blank" href={url.url} className="hover:underline">
+                                                ↗ {url.title}
+                                            </a>
+                                        ))}
+
+                                    </div>
+                                </div>
+                            </HoverCardContent>
+                        </HoverCard>
+
                     </div>
                     {/* <div className="flex flex-col">
                         <div className="flex flex-row justify-between items-center px-3 w-full py-3 rounded-lg bg-gray-100">

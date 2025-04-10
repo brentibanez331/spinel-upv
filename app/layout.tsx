@@ -39,7 +39,7 @@ export default async function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
             <div className="w-full h-screen flex flex-col items-center">
-              <nav className="w-full fixed left-0 z-[999] items-center flex justify-center h-16">
+              <nav className="w-full fixed left-0 z-40 items-center flex justify-center h-16">
                 <DynamicNavbar>
                   <div className=" flex gap-5 items-center font-semibold">
                     <DynamicLogo />

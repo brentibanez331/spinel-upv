@@ -5,6 +5,12 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableLambda } from "@langchain/core/runnables";
 import { HumanMessage } from "@langchain/core/messages";
 
+type ExtractedSearch = {
+  title: string;
+  url: string;
+  content: string;
+};
+
 const prompt = ChatPromptTemplate.fromMessages([
   [
     "system",
@@ -36,6 +42,8 @@ const chain = prompt.pipe(llmWithTools);
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    let searchResults: ExtractedSearch[] = [];
+
     const toolChain = RunnableLambda.from(async (userInput: string, config) => {
       const formattedInput = `Please provide a concise, single-paragraph summary about this political candidate: ${userInput}. 
       Search for current information about them to verify facts.`;
@@ -50,6 +58,10 @@ export async function POST(req: NextRequest) {
       );
 
       const toolMsgs = await searchTool.batch(aiMsg.tool_calls!, config);
+      searchResults = JSON.parse(toolMsgs[0].content);
+      console.log("TOOL MSG JSON: ", searchResults);
+      
+
       return chain.invoke(
         {
           messages: [humanMessage, aiMsg, ...toolMsgs],
@@ -58,11 +70,18 @@ export async function POST(req: NextRequest) {
       );
     });
 
+   
     const toolChainResult = await toolChain.invoke(body.input);
-    console.log(toolChainResult)
 
+    const searchUrls = searchResults.map((item) => ({
+      title: item.title,
+      url: item.url,
+    }));
+
+
+    console.log("Search URLS: ", searchUrls)
     return NextResponse.json({
-      data: toolChainResult.content,
+      data: { summary: toolChainResult.content, sources: searchUrls },
       status: 200,
     });
   } catch (error) {

@@ -4,6 +4,12 @@ import { ChatOpenAI } from "@langchain/openai";
 import { skillFormat } from "@/utils/schema";
 import { TavilySearchResults } from "@langchain/community/tools/tavily_search";
 
+type ExtractedSearch = {
+  title: string
+  url: string
+  content: string
+}
+
 const llm = new ChatOpenAI({
     model: "gpt-3.5-turbo",
     temperature: 0.1
@@ -28,31 +34,49 @@ export async function POST(req: NextRequest) {
     const educationResults = await searchTool.invoke(`Education of ${name}`)
     const platformResults = await searchTool.invoke(`Platform and Advocacy of ${name}`)
 
+    const experienceData: ExtractedSearch[] = JSON.parse(experienceResults)
+    const educationData: ExtractedSearch[] = JSON.parse(educationResults)
+    const platformData: ExtractedSearch[] = JSON.parse(platformResults)
+
+    const experienceUrls = experienceData.map(item => ({title: item.title, url: item.url}))
+    const educationUrls = educationData.map(item => ({title: item.title,url: item.url}))
+    const platformUrls = platformData.map(item => ({title: item.title, url: item.url}))
+
+    console.log(platformUrls)
+
     const enhancedPrompt = `
 You are evaluating a senatorial candidate from the Philippines based on three core criteria: Education, Career Experience, and Platform & Advocacy.
 
 Please rate the candidate on a scale from 0 to 100 for each category based on how they compare to an ideal Filipino senator.
-Include a one to two sentences of reasoning for the scores for each category. Do not include the name of the candidate in the reasoning. 
-Avoid mentioning the criteria within the reasoning.
+Include a one to two sentences of reasoning for the scores for each category. Start your reasonings with the name of the candidate.
+Avoid mentioning the criteria and score or range within the reasoning.
 
-Use the following baselines for scoring:
+Use the following detailed scoring guidelines:
 
-1. **Education** (Ideal: 100%)
-   - Graduate of a reputable university (e.g., UP, Ateneo, La Salle, international equivalent)
-   - Has at least a Bachelor's degree related to law, public policy, economics, or political science
-   - Bonus: Postgraduate degrees or continuing education
+1. **Education** 
+   - Excellent (90-100%): Graduate of a top-tier university (UP, Ateneo, La Salle, international equivalent) with postgraduate degrees in law, public policy, economics, or political science.
+   - Good (80-89%): Bachelor's degree from a reputable university in a relevant field with some continuing education or specialized training.
+   - Average (60-79%): Bachelor's degree from a lesser-known institution or in a field not directly related to governance.
+   - Below Average (40-59%): Incomplete tertiary education or education in fields with minimal relevance to public service.
+   - Poor (0-39%): Limited formal education or insufficient information about educational background.
 
-2. **Career / Experience** (Ideal: 100%)
-   - 10+ years of experience in public service, law, or leadership roles
-   - Previous roles as legislator, governor, mayor, or in executive positions
-   - Proven record of ethical leadership and accomplishments
+2. **Career / Experience** 
+   - Excellent (90-100%): 10+ years in significant public service roles (legislator, governor, mayor) with documented accomplishments and ethical leadership.
+   - Good (80-89%): 5-9 years in public service positions or equivalent leadership experience in relevant private sector or NGO roles.
+   - Average (60-79%): Some experience in local governance or limited national exposure; or primarily private sector experience with some public service connection.
+   - Below Average (40-59%): Minimal governance experience or primarily in appointed rather than elected positions.
+   - Poor (0-39%): No significant public service experience or insufficient information about career background.
 
-3. **Platform & Advocacy** (Ideal: 100%)
-   - Has a clear and consistent platform relevant to national issues (e.g., education reform, poverty alleviation, health care)
-   - Advocated or authored meaningful legislation or community programs
-   - Public speeches, campaign materials, or endorsements align with democratic values and public welfare
+3. **Platform & Advocacy** 
+   - Excellent (90-100%): Clear, comprehensive platform addressing critical national issues with proven track record of advocacy and successful implementation of related policies.
+   - Good (80-89%): Well-defined platform on multiple issues with some evidence of previous advocacy work or community programs.
+   - Average (60-79%): General platform statements without specificity or limited evidence of previous advocacy commitment.
+   - Below Average (40-59%): Vague platform focusing on popular issues without substantive plans or minimal record of advocacy.
+   - Poor (0-39%): No clear platform, inconsistent messaging, or insufficient information about advocacy positions.
 
-Give your best estimate for each category based on the following search results. If information is missing or weak, reduce the score accordingly.
+IMPORTANT: Be critical and precise in your evaluation. If information is missing, ambiguous, or contradictory, this should be reflected in lower scores. A score of 80 or above should only be given when there is clear, substantive evidence meeting the criteria. Avoid inflating scores when information is limited.
+
+Give your best estimate for each category based on the following search results:
 
 Search Results:
 
@@ -73,8 +97,14 @@ ${JSON.stringify(platformResults)}
     return NextResponse.json({
         data: {
             experience: result.experience,
+            experienceReasoning: result.experienceReasoning,
+            experienceUrls: experienceUrls,
             education: result.education,
-            platform: result.platformAndAdvocacy
+            educationReasoning: result.educationReasoning,
+            educationUrls: educationUrls,
+            platform: result.platformAndAdvocacy,
+            platformReasoning: result.platformAndAdvocacyReasoning,
+            platformUrls: platformUrls
         },
         status: 200
     })
