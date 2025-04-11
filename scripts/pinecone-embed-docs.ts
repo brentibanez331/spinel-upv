@@ -1,4 +1,4 @@
-import { getChunkedDocsFromPDF } from "@/lib/pdf-loader";
+import { getChunkedDocsFromMarkdown } from "@/lib/pdf-loader";
 import { embedAndStoreDocs } from "@/lib/vector-store";
 import { getPineconeClient } from "@/lib/pinecone-client";
 
@@ -11,7 +11,7 @@ import { getPineconeClient } from "@/lib/pinecone-client";
     }
 
     console.log("Preparing chunks from PDF file");
-    const docs = await getChunkedDocsFromPDF();
+    const docs = await getChunkedDocsFromMarkdown(); // getChunkedDocsFromMarkdown
     console.log(`Loading ${docs.length} chunks into pinecone...`);
     await embedAndStoreDocs(pineconeClient!, docs);
     console.log("Data embedded and store in pine-cone index");
