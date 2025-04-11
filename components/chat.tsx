@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { string } from "zod";
 import { ChatMessageHistory } from "@/utils/types";
 import { Textarea } from "./ui/textarea";
-import { Send } from "lucide-react";
+import { Ellipsis, Send } from "lucide-react";
 import Image from "next/image";
 import { Separator } from "./ui/separator";
 import Link from "next/link";
@@ -136,6 +136,11 @@ export function Chat() {
                         }
                     </div>
                 ))}
+                {isGenerating && (
+                    <div className="flex space-x-1 text-sm animate-pulse bg-neutral-100 rounded-2xl py-2 px-3">
+                        <p>Thinking</p><Ellipsis className="text-neutral-500" />
+                    </div>
+                )}
             </div>
 
             <div className="relative m-4 flex space-x-2">

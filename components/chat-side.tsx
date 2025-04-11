@@ -28,14 +28,14 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
     useEffect(() => {
         if (isStreaming && streamingIndex < fullResponse.length) {
             const typingSpeed = 0.5; // Much faster typing speed (5ms per character)
-            
+
             const typingTimeout = setTimeout(() => {
                 // Update by chunks for faster appearance
                 const chunkSize = 3; // Process multiple characters at once
                 const newIndex = Math.min(streamingIndex + chunkSize, fullResponse.length);
-                
+
                 setStreamingIndex(newIndex);
-                
+
                 // Update the last message in chat history with current text
                 const updatedHistory = [...chatHistory];
                 if (updatedHistory.length > 0) {
@@ -43,7 +43,7 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
                     setChatHistory(updatedHistory);
                 }
             }, typingSpeed);
-            
+
             return () => clearTimeout(typingTimeout);
         } else if (isStreaming && streamingIndex >= fullResponse.length) {
             setIsStreaming(false);
@@ -153,6 +153,14 @@ export default function ChatSide({ candidate, suggestions, setSuggestions, chatH
                     <br />
                     Matutulungan kita sa masusunod:
                     <br />
+                    <div className="space-y-1 pt-2">
+                        <p>- Mga <span className="font-bold">profile at background</span> ng mga kandidato</p>
+                        <p>- Mga <span className="font-bold">plataporma at adhikain</span> nila</p>
+                        <p>- Mga nakaraang posisyon at <span className="font-bold">achievements</span></p>
+                        <p>- Mga <span className="font-bold">kontrobersya</span> o isyung kaugnay sa kanila</p>
+                        <p>- Mga <span className="font-bold">qualification at educational background</span></p>
+                        <p>- Mga importanteng impormasyon para sa mga botante</p>
+                    </div>
                 </div>
             )}
 
