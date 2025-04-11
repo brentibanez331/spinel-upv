@@ -5,19 +5,19 @@ import { env } from "./config";
 
 export async function getChunkedDocsFromMarkdown() {
   try {
-    const markdownPath = "../../../../README.md";
+    // const markdownPath = "../../../../README.md";
     // const loader = new PDFLoader(env.PDF_PATH);
-    const loader = new UnstructuredLoader(markdownPath, {
+    const loader = new UnstructuredLoader(env.PDF_PATH, {
       apiKey: process.env.UNSTRUCTURED_API_KEY,
       apiUrl: process.env.UNSTRUCTURED_API_URL,
     });
 
     const docs = await loader.load();
 
-        const textSplitter = new RecursiveCharacterTextSplitter({
-            chunkSize: 400,
-            chunkOverlap: 50
-        })
+    const textSplitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1250,
+      chunkOverlap: 100,
+    });
 
     const chunkedDocs = await textSplitter.splitDocuments(docs);
 

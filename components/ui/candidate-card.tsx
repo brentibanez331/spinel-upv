@@ -74,15 +74,15 @@ export const CandidateCard = ({
 
                     if (updateError) console.error("Update error:", updateError);
                 }
-                // else {
-                //     // Else, insert new
-                //     const { error: insertError } = await supabase.from("ballot").insert([{
-                //         candidate_id: candidate.id,
-                //         user_id: user.id,
-                //         status: 'saved',
-                //     }]);
-                //     if (insertError) console.error("Insert error:", insertError);
-                // }
+                else {
+                    // Else, insert new
+                    const { error: insertError } = await supabase.from("ballot").insert([{
+                        candidate_id: candidate.id,
+                        user_id: user.id,
+                        status: 'saved',
+                    }]);
+                    if (insertError) console.error("Insert error:", insertError);
+                }
             } else {
                 if (existing) {
                     // Instead of delete, update status to 'hidden'

@@ -40,7 +40,7 @@ export async function processUserMessage({
       });
 
     // Get relevant documents
-    const relevantDocs = await vectorStore.similaritySearch(inquiryResult, 10);
+    const relevantDocs = await vectorStore.similaritySearch(inquiryResult, 5);
     console.log(`Found ${relevantDocs.length} relevant documents`);
 
     relevantDocs.forEach((doc, i) => {
