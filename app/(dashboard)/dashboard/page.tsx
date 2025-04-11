@@ -11,6 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import Loader from "@/components/loader/loader";
+import { User } from "@supabase/supabase-js";
+import { createClient } from "@/utils/supabase/client";
 
 export default function UserDashboard() {
     const [isFetching, setIsFetching] = useState<boolean>(true)
@@ -22,6 +24,10 @@ export default function UserDashboard() {
 
     const [suggestions, setSuggestions] = useState<string[]>([])
     const [chatHistory, setChatHistory] = useState<ChatMessageHistory[]>([])
+    const [user, setUser] = useState<User | null>(null);
+    const [likedCandidates, setLikedCandidates] = useState<string[]>([]);
+
+    const supabase = createClient();
 
     // Load candidates on component mount
     useEffect(() => {
@@ -42,10 +48,44 @@ export default function UserDashboard() {
                 setLoading(false);
             }
         };
+        const fetchUser = async () => {
+            const {
+                data: { user },
+            } = await supabase.auth.getUser();
+            setUser(user);
+        };
+        fetchUser();
 
         loadCandidates();
     }, []);
+    //load liked candidates 
+    useEffect(() => {
+        const loadUserLikedCandidates = async () => {
+            if (user) {
+                const supabase = createClient();
+                const { data, error } = await supabase
+                    .from("ballot")
+                    .select("*")
+                    .eq("user_id", user.id)
+                    .eq("status", "saved");
 
+                if (error) {
+                    console.error("ERROR LIKED DETAILS:", error);
+                    setError("Failed to load liked candidates");
+                } else {
+                    console.log("USER FOUND!", user);
+                    setLikedCandidates(data.map((item) => item.candidate_id));
+                    console.log("USER LIKED CANDIDATES", data);
+                }
+                if (data?.length === 0) {
+                    console.log("NO LIKED CANDIDATES");
+                }
+            } else {
+                console.log("No user found");
+            }
+        };
+        loadUserLikedCandidates();
+    }, [user]);
     // Set up chat when a candidate is selected
     useEffect(() => {
         if (selectedCandidate) {
@@ -53,13 +93,14 @@ export default function UserDashboard() {
 
             setChatHistory([{
                 role: 'AI',
-                message: `Nakita ko na interesado ka na malaman patungkol kay ${selectedCandidate.display_name}. Ano ang gusto mong malaman?`
+                message: `Nakita ko na interesado ka na malaman patungkol kay ${selectedCandidate.display_name
+                    }.Ano ang gusto mong malaman ? `
             }]);
 
             setSuggestions([
-                `Who is ${selectedCandidate.display_name}?`,
-                `What are ${gender} current platforms?`,
-                `What are some of ${gender} previous projects?`
+                `Who is ${selectedCandidate.display_name} ? `,
+                `What are ${gender} current platforms ? `,
+                `What are some of ${gender} previous projects ? `
             ]);
         }
     }, [selectedCandidate]);
@@ -70,11 +111,14 @@ export default function UserDashboard() {
             return [];
         }
 
+
         if (!searchQuery || searchQuery.trim() === "") {
             return candidates;
         }
 
+
         const query = searchQuery.toLowerCase().trim();
+
 
         return candidates.filter(candidate => {
             // Search through multiple candidate fields
@@ -82,14 +126,18 @@ export default function UserDashboard() {
                 // Name search
                 candidate.display_name?.toLowerCase().includes(query) ||
 
+
                 // Party search
                 candidate.political_party?.toLowerCase().includes(query) ||
+
 
                 // Position search (if available)
                 (candidate.candidacy[0].position_sought && candidate.candidacy[0].position_sought.toLowerCase().includes(query))
 
+
                 // // Location search (if available)
                 // (candidate.location && candidate.location.toLowerCase().includes(query)) ||
+
 
                 // // Bio search (if available)
                 // (candidate.bio && candidate.bio.toLowerCase().includes(query))
@@ -124,7 +172,7 @@ export default function UserDashboard() {
     return (
         <div className="flex flex-grow sm:pr-96">
             <div className="flex flex-col space-y-4 h-full mt-10 bg-neutral-100 overflow-y-auto p-4 w-full rounded-xl py-6">
-                <div className="relative fixed sticky top-0 left-0">
+                <div className="sticky top-0 left-0">
                     <Input
                         className="w-[300px] rounded-xl pl-10"
                         value={searchQuery}
@@ -132,30 +180,35 @@ export default function UserDashboard() {
                         placeholder="Search by name, party, or position..."
                     />
                     <Search className="absolute top-2.5 left-2 text-neutral-300" size={20} />
+                    <Search className="absolute top-2.5 left-2 text-neutral-300" size={20} />
                 </div>
 
+
                 <div className="flex w-full gap-4 flex-col">
-                    {!isFetching ? (
+                    {!loading ? (
 
                         filteredCandidates.length > 0 ? (
                             filteredCandidates.map((candidate) => (
                                 <CandidateCard
                                     key={candidate.id}
+                                    user={user}
                                     candidate={candidate}
                                     selectedCandidate={selectedCandidate}
+                                    isPreviouslyLiked={likedCandidates.includes(candidate.id)}
                                     setSelectedCandidate={setSelectedCandidate}
+                                    onUnsaveCandidate={null}
                                 />
+
                             ))
                         ) : (
                             <p>No Candidates found</p>
                         )
-
-
                     ) : (
                         <Loader />
                     )}
                 </div>
             </div>
+
 
             <ChatSide
                 candidate={selectedCandidate}

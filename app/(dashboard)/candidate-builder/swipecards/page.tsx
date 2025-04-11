@@ -101,8 +101,8 @@ export default function SwipeCardsPage() {
             {" "}
             <div>
               {user &&
-              filterLikedCandidates &&
-              filterLikedCandidates.length > 0 ? (
+                filterLikedCandidates &&
+                filterLikedCandidates.length > 0 ? (
                 <SwipeCards
                   candidates={filterLikedCandidates.map((candidate) => ({
                     id: candidate.id,
@@ -111,7 +111,9 @@ export default function SwipeCardsPage() {
                     displayName: candidate.display_name,
                     politicalParty: candidate.political_party || "N/A",
                   }))}
+                  refetchCandidates={setLikedCandidates}
                 />
+
               ) : (
                 <div>No candidates available.</div>
               )}
