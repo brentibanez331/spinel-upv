@@ -14,7 +14,7 @@ export default async function ChatLayout({ children }: PropsWithChildren) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return redirect('/login');
+    return redirect('/sign-in');
   }
 
   return <div className=''>{children}</div>;

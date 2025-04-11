@@ -1,12 +1,12 @@
-import DeployButton from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import HeaderAuth from "@/components/header-auth";
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
-import Link from "next/link";
 import "./globals.css";
+import Image from "next/image";
+import DynamicLogo from "@/components/dynamic-logo";
+import DynamicNavbar from "@/components/dynamic-navbar";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -14,8 +14,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "BotWais by Spinel",
+  description: "",
 };
 
 const geistSans = Geist({
@@ -23,14 +23,14 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body className="bg-background text-foreground" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -38,22 +38,18 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className="min-h-screen flex flex-col items-center">
-
-            <div className="flex-1 w-full flex flex-col items-center">
-              {/* {children} */}
-              {/* <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm flex-wrap">
-                  <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"}>Next.js Supabase Starter</Link>
-                    <div className="flex items-center gap-2">
-                      <DeployButton />
-                    </div>
+            <div className="w-full h-screen flex flex-col items-center">
+              <nav className="w-full fixed left-0 z-40 items-center flex justify-center h-16">
+                <DynamicNavbar>
+                  <div className=" flex gap-5 items-center font-semibold">
+                    <DynamicLogo />
                   </div>
+
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
-                </div>
+                </DynamicNavbar>
               </nav>
-               */}
-               <div className="flex w-full">
+
+              <div className="flex items-center justify-center w-full h-screen">
                 {children}
               </div>
             </div>

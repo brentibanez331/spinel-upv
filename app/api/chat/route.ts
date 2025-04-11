@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
     const currentQuestion = messages[messages.length - 1].content;
     if (!currentQuestion?.trim()) {
       return NextResponse.json(
@@ -47,7 +48,7 @@ export async function POST(req: NextRequest) {
       // temperature: 0.1,
       streaming: true,
     });
-    
+
     const pc = await getPineconeClient();
     const vectorStore = await getVectorStore(pc);
     // Log for debugging
@@ -64,6 +65,7 @@ export async function POST(req: NextRequest) {
       vectorStore,
       model,
     });
+
     console.log("message answer =>", stream);
     // console.log("message inquiry =>", inquiry);
     // Convert the stream using the new adapter

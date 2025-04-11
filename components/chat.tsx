@@ -9,8 +9,10 @@ import { Spinner } from "./ui/spinner";
 
 export function Chat() {
     const { messages, input, handleInputChange, handleSubmit, status } = useChat({
+        api: '/api/chat',
         initialMessages: initialMessages
     });
+
     return (
         <div className="rounded-2xl border h-full flex flex-col">
             <div className="p-6 overflow-y-auto flex-grow h-1/2">
@@ -28,7 +30,7 @@ export function Chat() {
                 <Input
                     onChange={handleInputChange}
                     value={input}
-                    placeholder="Itanong mo kay Yano..."
+                    placeholder="Itanong mo kay Gabay..."
                     className="mr-2" />
                 <Button type="submit" className="w-24">
                     {status === "streaming" ? <Spinner/> : "Ask"}
