@@ -242,7 +242,7 @@ const CandidateInfo = () => {
                                             <p>
                                                 View Sources
                                             </p>
-                                            <LinkIcon className='' size={16}/>
+                                            <LinkIcon className='' size={16} />
                                         </div>
                                     </DialogTrigger>
                                     <DialogContent>
