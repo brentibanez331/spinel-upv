@@ -1,13 +1,8 @@
 "use client"
 
-import { Message, useChat } from "@ai-sdk/react";
-import { ChatBubble } from "./chat-bubble";
+
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { initialMessages } from "@/lib/utils";
-import { Spinner } from "./ui/spinner";
 import { useEffect, useState } from "react";
-import { string } from "zod";
 import { ChatMessageHistory } from "@/utils/types";
 import { Textarea } from "./ui/textarea";
 import { Ellipsis, Send } from "lucide-react";
