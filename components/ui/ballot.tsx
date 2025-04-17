@@ -192,8 +192,8 @@ export const BallotTable = ({ candidates }: { candidates: Card[] }) => {
   }, []);
 
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
+    <div className="w-full p-4">
+      <div className="flex items-center py-4 ">
         <Input
           placeholder="Filter by name..."
           value={
@@ -269,7 +269,8 @@ export const BallotTable = ({ candidates }: { candidates: Card[] }) => {
                   className="h-18 text-center"
                 >
                   <div className="h-screen flex items-center justify-center">
-                    <MoonLoader color="#000000" />
+                    {/* <MoonLoader color="#000000" /> */}
+                    <p className=" text-lg">No candidates found</p>
                   </div>
                 </TableCell>
               </TableRow>

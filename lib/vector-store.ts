@@ -3,6 +3,7 @@ import { PineconeStore } from "@langchain/pinecone";
 import { Pinecone } from "@pinecone-database/pinecone";
 import { env } from "./config";
 
+
 export async function embedAndStoreDocs(
   client: Pinecone,
   // @ts-ignore docs type error

@@ -1,6 +1,6 @@
 'use client'
 
-import { BotMessageSquare, Menu, Rocket, User, Vote } from "lucide-react";
+import { BotMessageSquare, Heart, Menu, Rocket, User, Vote } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname, useSelectedLayoutSegments } from "next/navigation";
@@ -21,27 +21,34 @@ export default function Nav({ children, params }: { children: ReactNode, params:
             {
                 name: 'Candidates',
                 href: '/dashboard',
-                isActive: segments[0] === "candidates",
+                isActive: segments[0] === "dashboard",
                 icon: <Rocket width={18} />
             },
             {
-                name: 'Ballot Builder',
-                href: '/ballot',
-                isActive: segments[0] === "ballot",
-                icon: <Vote width={18} />
-            },
-            {
-                name: 'Chat',
+                name: 'GabayChat',
                 href: '/chat',
-                isActive: segments[0] === "ballot",
+                isActive: segments[0] === "chat",
                 icon: <BotMessageSquare width={18} />
             },
             {
-                name: 'My Profile',
-                href: '/profile',
-                isActive: segments[0] === "profile",
-                icon: <User width={18} />
-            }
+                name: 'Candidate Builder',
+                href: '/candidate-builder',
+                isActive: segments[0] === "candidate-builder",
+                icon: <Vote width={18} />
+            },
+            {
+                name: 'My Favorites',
+                href: '/my-favorites',
+                isActive: segments[0] === "my-favorites",
+                icon: <Heart width={18} />
+            },
+            
+            // {
+            //     name: 'My Profile',
+            //     href: '/profile',
+            //     isActive: segments[0] === "profile",
+            //     icon: <User width={18} />
+            // }
         ]
     }, [segments, id])
 
@@ -59,14 +66,14 @@ export default function Nav({ children, params }: { children: ReactNode, params:
             </button>
 
             <div
-                className={`transform ${showSidebar ? "w-full translate-x-0" : "-translate-x-full"
+                className={`transform ${showSidebar ? "w-full translate-x-0" : "-translate-x-full pt-10"
                     } fixed z-10 flex h-full flex-col justify-between border-stone-200 bg-white transition-all sm:w-60 sm:translate-x-0`}
             >
                 <div className="flex grid w-max flex-col items-center gap-2 sm:w-52 mx-4">
                     <div className="flex flex-col items-center justify-center space-x-2 space-y-4 rounded-lg px-4 pb-2 pt-6 sm:w-52">
                     </div>
 
-                    <div className="grid">
+                    <div className="grid gap-2">
                         {tabs.map(({ name, href, isActive, icon }) => (
                             <Link
                                 key={name}
@@ -82,11 +89,6 @@ export default function Nav({ children, params }: { children: ReactNode, params:
                         ))}
                     </div>
                 </div>
-                <form action={signOutAction}>
-                    <Button type="submit" variant={"outline"}>
-                        Sign out
-                    </Button>
-                </form>
             </div>
         </>
     )

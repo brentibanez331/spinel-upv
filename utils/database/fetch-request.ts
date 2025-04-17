@@ -13,10 +13,11 @@ export const fetchRequest = async (
   const { data: candidates, error } = await createClient().from(table).select(`
       *,
       personal_info (*),
-      candidacy (*)
+      candidacy (*),
+      credentials (*)
     `);
 
-  console.log(candidates)
+  // console.log(candidates
 
   if (error) {
     console.log(error);
@@ -45,3 +46,7 @@ export const fetchRequest = async (
 
   return { Candidate: candidatesWithImages, error: null };
 };
+
+
+
+

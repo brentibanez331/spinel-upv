@@ -4,6 +4,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./
 import { Message } from "@ai-sdk/react";
 import ReactMarkdown from "react-markdown"
 import { formattedSourceText } from "@/lib/utils";
+import Image from "next/image";
 
 const wrappedText = (text: string) =>
     text.split("\n").map((line, i) => (
@@ -37,10 +38,29 @@ export function ChatBubble({
                         className={
                             role != "assistant"
                                 ? "text-amber-500"
-                                : "text-blue-500"
+                                : "text-[#3f4ea2]"
                         }
                     >
-                        {role == "assistant" ? "AI" : "You"}
+                        {role == "assistant" ?
+                            <div className="flex space-x-2 items-center">
+                                <Image
+                                    src="/logo.png"
+                                    alt="logo"
+                                    width={20}
+                                    height={20}
+                                />
+                                <p>
+                                    Gabay
+                                </p>
+                            </div> : 
+                            <div className="flex space-x-2 items-center">
+                                <Image
+                                    src="/user.png"
+                                    alt=""
+                                    width={25}
+                                    height={25} />
+                                <p>You</p>
+                            </div>}
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
